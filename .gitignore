@@ -1,0 +1,6 @@
+lib*
+*#
+pyvenv.cfg
+valid_socks.txt
+proxies.txt
+out.txt
