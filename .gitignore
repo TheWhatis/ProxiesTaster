@@ -5,3 +5,5 @@ valid_socks.txt
 proxies.txt
 out.txt
 bin/
+logs/
+include/__pycache__

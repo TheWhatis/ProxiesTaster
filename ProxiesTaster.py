@@ -5,6 +5,7 @@ import os
 import sys
 import json
 import select
+import logging
 
 # Asyncio
 import asyncio
@@ -20,6 +21,9 @@ from aiohttp.client_reqrep import ClientResponse
 
 # useragent
 from fake_useragent import UserAgent
+
+# Colorama
+from colorama import init
 
 # aiohttp
 import aiohttp
@@ -42,17 +46,17 @@ from aiohttp.client_exceptions import ClientResponseError
 from aiohttp.client_exceptions import ClientPayloadError
 from aiohttp.client_exceptions import InvalidURL
 
+# My logger
+from include.logger import setting_logging, log
 
 # My types
 # Показывает какие протоколы будут использоваться
 # в прокси
 Protocol = Union["http", "https", "socks4", "socks5"]
 
-
 # Показывает какие будут использоваться
 # протоколы в url адресе
 UrlProtocol = Union["http", "https"]
-
 
 # Для удобства сделал свой тип
 ProxyString = str
@@ -128,6 +132,7 @@ Proxies = list[ProxyString | ProxyDict]
 
 
 # Основной код
+@log("Get url protocol")
 def get_url_protocol(protocol: Protocol) -> UrlProtocol:
     """
     Получить корректный протокол для url;
@@ -152,6 +157,7 @@ def get_url_protocol(protocol: Protocol) -> UrlProtocol:
     raise AssertionError(f"Undefined protocol {protocol}")
 
 
+@log("Except proxy")
 async def except_proxy(
         protocol: Protocol,
         proxy: ProxyString,
@@ -180,6 +186,8 @@ async def except_proxy(
         .. This is returns
            Description;
     """
+
+    global DLOGGER
 
     # Заголовки
     headers = {
@@ -222,19 +230,19 @@ async def except_proxy(
         elif len_splitted_proxy == 2:
             port = splitted_proxy[1].split(":")[1]
     except Exception:
-        print(f"Invalid format proxy '{proxy}'")
+        DLOGGER.error(f"Invalid format proxy '{proxy}'")
         return invalid_result
 
     # Если порт неправильный, то возвращаем ошибку
     try:
         port = int(port)
     except Exception:
-        print(f"Error converted proxy port from string to integer value. Port: '{port}'")
+        DLOGGER.error(f"Error converted proxy port from string to integer value. Port: '{port}'")
         return invalid_result
 
     # Если порт не входит в диапазон поддерживаемых
     if port >= 65535:
-        print(f"Port value '{port}' must be in range 0-65535")
+        DLOGGER.error(f"Port value '{port}' must be in range 0-65535")
         return invalid_result
 
     # В зависимости от протокола, разные способ
@@ -276,8 +284,8 @@ async def except_proxy(
             # при неправильной работе прокси (AttributeError) и
             # блокируем вывод исключеыния для него
             if str(error) == "'NoneType' object has no attribute 'get_extra_info'":
-                print(error)
-                print(f"Proxy {proxy}")
+                DLOGGER.error(error)
+                DLOGGER.error(f"Proxy {proxy}")
                 return invalid_result
 
             # Иначе просто выводим исключыение
@@ -295,6 +303,7 @@ async def except_proxy(
     return invalid_result
 
 
+@log("Check proxy and define protocol (async)")
 async def check_proxy_and_define_protocol(
         proxy: ProxyString
 ) -> Union[bool, CheckedProxy]:
@@ -393,6 +402,7 @@ async def check_proxy_and_define_protocol(
     return False
 
 
+@log("Check proxy (async)")
 async def check_proxy(
         protocol: Protocol,
         proxy: ProxyString
@@ -445,6 +455,7 @@ async def check_proxy(
     return False
 
 
+@log("Check many proxies and defining protocols (async)")
 async def check_and_define_protocol_proxies(
         proxies: Proxies
 ) -> list[CheckedProxy]:
@@ -465,6 +476,7 @@ async def check_and_define_protocol_proxies(
         .. Возвращает готовый список прокси
            (если не нашел таких, то пустой список);
     """
+    DLOGGER = logging.getLogger("DLOGGER")
 
     result = []
 
@@ -476,12 +488,11 @@ async def check_and_define_protocol_proxies(
 
         if defined:
             proxy = proxy["proxy"] if "proxy" in proxy else proxy
-            print(f"Proxy '{proxy}' work")
+            DLOGGER.info(f"Proxy '{proxy}' work")
+            DLOGGER.debug(f"Proxy '{proxy}' work data: '{defined}")
             result.append(defined)
         else:
-            print(f"Proxy '{proxy}' dont work")
-
-        print("")
+            DLOGGER.info(f"Proxy '{proxy}' dont work")
 
     return result
 
@@ -495,6 +506,9 @@ async def main():
        через терминал (а не как модуль)
 
     """
+    # Иницилизация colorama
+    init()
+
     # Основные аргументы
     # Парсим входные аргументы
     parser = argparse.ArgumentParser(
@@ -545,6 +559,39 @@ async def main():
         default="ALL"
     )
 
+    # Файл с конфигом
+    parser.add_argument(
+        "--logconfig",
+        "-lc",
+        type=str,
+        help="path to log config in json format",
+        default="log.config.json"
+    )
+
+    # Директория куда сохранять логи
+    parser.add_argument(
+        "--logdir",
+        "-ld",
+        type=str,
+        help="log dir (which to save .log files)"
+    )
+
+    # Уровень логироания
+    parser.add_argument(
+        "--loglevel",
+        "-ll",
+        type=str,
+        help="log level (debug, critical, info e.t.c.) only stdout"
+    )
+
+    # Формат логов
+    parser.add_argument(
+        "--logformat",
+        "-lf",
+        type=str,
+        help="log format"
+    )
+
     # Получаем аргументы
     args = parser.parse_args()
 
@@ -570,6 +617,19 @@ async def main():
     else:
         proxies = args.proxies.strip().split("\n")
 
+    # Define log config
+    logkwargs = {}
+    if args.logdir:
+        logkwargs["dir"] = args.logdir
+
+    if args.loglevel:
+        logkwargs["level"] = args.loglevel
+
+    if args.logformat:
+        logkwargs["format"] = args.logformat
+
+    FLOGGER, DLOGGER = setting_logging(args.logconfig, **logkwargs)
+
     # Задачи
     tasks = []
 
@@ -578,7 +638,7 @@ async def main():
     count_proxies: int = len(proxies)
     count_proxies_in_worker: int = round(count_proxies / args.workers)
 
-    print(f"Configuring workers: {args.workers}")
+    DLOGGER.info(f"Configuring workers: {args.workers}")
     try:
         remainder_proxies: int = count_proxies % count_proxies_in_worker
     except ZeroDivisionError:
@@ -587,7 +647,7 @@ async def main():
     worker_proxy: Proxies = []
 
     # Создаем задачи (корутины)
-    print("Generating async workers")
+    DLOGGER.info("Generating async workers")
     for proxy in proxies:
         worker_proxy.append(proxy)
 
@@ -599,7 +659,7 @@ async def main():
             worker_proxy = []
 
     # Вызываем и ошидаем выполнения задач
-    print("Start checking proxies")
+    DLOGGER.info("Start checking proxies")
     results = await asyncio.gather(*tasks)
 
     # Сортировка и доп проверка
@@ -609,7 +669,7 @@ async def main():
         for expanded in result:
             expand_results.append(expanded)
 
-    print("Prepare and filter checked proxies")
+    DLOGGER.info("Prepare and filter checked proxies")
     valid_proxies = []
     for proxy in expand_results:
         if proxy["status"] == 200:
@@ -633,17 +693,17 @@ async def main():
                 valid_proxies.append(str_proxy)
 
             # И выводим в консоль
-            print(str_proxy)
+            DLOGGER.info(str_proxy)
 
     # Сохраняем в файл
     if args.out:
-        print(f"Write result in '{args.out}'")
+        DLOGGER.info(f"Write result in '{args.out}'")
         with open(args.out, "w", encoding="uTF-8") as valid_proxy:
             valid_proxy.write("\n".join(valid_proxies))
 
     # Добавляем в файл
     if args.append:
-        print(f"Append to file end result; Filename is '{args.append}'")
+        DLOGGER.info(f"Append to file end result; Filename is '{args.append}'")
         with open(args.append, "a", encoding="UTF-8") as valid_proxy:
             for proxy in valid_proxies:
                 valid_proxy.write("\n" + proxy)
