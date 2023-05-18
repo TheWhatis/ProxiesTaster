@@ -187,7 +187,7 @@ async def except_proxy(
            Description;
     """
 
-    global DLOGGER
+    DLOGGER = logging.getLogger("DLOGGER")
 
     # Заголовки
     headers = {
