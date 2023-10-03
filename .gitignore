@@ -7,3 +7,6 @@ out.txt
 bin/
 logs/
 include/__pycache__
+*.txt
+proxies/
+valid.txt
