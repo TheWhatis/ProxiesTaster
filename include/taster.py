@@ -14,6 +14,7 @@ from typing import Literal
 
 # Dataclasses
 from dataclasses import dataclass
+from dataclasses import asdict
 
 # Aiohttp
 from aiohttp.client_reqrep import ClientResponse
@@ -82,9 +83,8 @@ class ProxyDict:
     protocol: Protocol
     proxy: ProxyString
 
-
 @dataclass
-class CheckedProxy:
+class CheckedProxy(ProxyDict):
     """
     Датакласс для уже проверенного прокси;
     --------------------------------------
@@ -97,12 +97,6 @@ class CheckedProxy:
         .. Статус ответа от сервера
            (от ipinfo в данном случае)
 
-    :param proxy: ``ProxyString``
-        .. Строка прокси ip:port
-
-    :param protocol: ``Protocol``
-        .. Протокол, по которому обращаемся
-
     :param data: ``str | dict[str, str]``
         .. ClientResponse либо любые другие данные
 
@@ -112,10 +106,22 @@ class CheckedProxy:
     """
 
     status: int
-    proxy: ProxyString
-    protocol: Protocol
     data: str | dict[str, str] | ClientResponse
     text: str
+
+@dataclass
+class PreparedProxy(CheckedProxy):
+    """
+    Датакласс для обработанного прокси
+
+    :param parsed_response: ``dict``
+        .. Распаршенный ответ
+
+    :param country: ``str``
+        .. Страна прокси
+    """
+    response: Union[dict, False]
+    country: Union[str, False]
 
 
 # Тип для обозначения прокси, которые нужно передать
@@ -126,7 +132,7 @@ Country = list[str]
 
 # Тип для обозначения допустимых протоколов
 # (типов прокси) (для фильтрации)
-Type = list[Protocol]
+Protocols = list[Protocol]
 
 class ProxiesTaster:
     def __init__(
@@ -134,7 +140,12 @@ class ProxiesTaster:
             proxies: Proxies,
             workers: int = 200,
             country: Country = [],
-            ptype: Type = []
+            protocols: Protocols = [
+                'socks4',
+                'socks5',
+                'http',
+                'https'
+            ]
     ):
         """
         Иницилизация класса и
@@ -149,127 +160,36 @@ class ProxiesTaster:
 
         :param workers: ``int`` - default: 200
             .. Количество параллельных
-               задач (минимум 4)
+               задач (минимум 1)
 
         :param country: ``Country`` - default: []
             .. По какой стране(ам) фильтровать
 
-        :param ptype: ``Type`` - default: []
-            .. По какому типу(ам) фильтровать
+        :param protocols: ``Protocols`` - default: ['socks4', 'socks5', 'http', 'https']
+            .. По какому протоколам фильтровать
         """
         self.proxies = proxies
 
-        # Workers
-        self.workers = 4
-        if workers > 4:
-            self.workers = round(workers / 4) + workers % 4
-
         # Filters
-        self.country = country
-        self.type = ptype
+        self.set_country(country)
+        self.set_protocols(protocols)
+
+        # Workers
+        self.set_workers(workers)
 
         # Defaults
-        self.logger = logging
+        self.set_logger(logging)
+
+        # Здесь будут хранится
+        # уже обработанные прокси
         self.prepared = []
 
-
-    @staticmethod
-    def get_url_protocol(protocol: Protocol) -> UrlProtocol:
-        """
-        Получить корректный протокол для url
-        requests
-
-        :param protocol: ``Protocol``
-            .. Протокол: http, https, socks4, socks5
-
-        :param returns: ``str``
-            .. Возвращает протокол для
-               url (или ошибка, если неизвестен)
-        """
-        if "http" in protocol:
-            return protocol
-
-        if "socks" in protocol:
-            return "https"
-
-        raise AssertionError(f"Undefined protocol {protocol}")
-
-
-    @staticmethod
-    def cast_to_string(prepared: list) -> list:
-        """
-        Преобразовать отдельные элементы
-        прокси из обработанного массива (
-        через prepare_results) в строки
-
-        :param prepared: ``list``
-            .. Список обработанных прокси
-
-        :param returns: ``list``
-            .. Список прокси в виде строки;
-        """
-        casted = []
-        for proxy in prepared:
-            casted.append(
-                f"{proxy['protocol']}://{proxy['proxy']} {proxy['country']}"
-            )
-
-        return casted
-
-    def set_logger(self, logger):
-        """
-        Установить свой логгер
-
-        :param logger:
-            .. Объект логгера
-
-        :param returns: ``None``
-            .. Ничего не возвращает
-        """
-        self.logger = logger
-
-
-    async def except_proxy(
-            self,
-            protocol: Protocol,
-            proxy: ProxyString,
-            url: str
-    ) -> ExceptedProxy:
-        """
-        Определить не рабочий прокси;
-        -----------------------------
-        .. Делает запрос через aiohttp
-           и, с помощью exceptions, определяет
-           что прокси рабочий или нет
-
-
-        :param protocol: ``Protocol``
-            .. Протокол, по которому обращаться к прокси
-
-        :param proxy: ``ProxyString``
-            .. Сам прокси
-
-        :param url: ``str``
-            .. Ссылка на ресурс, на который
-               будет делаться запрос
-
-
-        :param returns: ``None``
-            .. This is returns
-               Description;
-        """
-
-        # Заголовки
-        headers = {
-            "User-Agent": UserAgent().random,
-            "Accept": "*/*",
-            "Proxy-Connection": "Keep-Alive"
-        }
+        # Другие статичные значения
 
         # Список ошибок, которые
         # возникают при неправильной работе
         # прокси
-        except_errors = (
+        self.except_errors = (
             InvalidServerReply,
             ClientConnectorError,
             InvalidServerVersion,
@@ -286,6 +206,145 @@ class ProxiesTaster:
             SocksError,
             InvalidURL
         )
+
+
+    @staticmethod
+    def get_url_protocol(protocol: Protocol) -> UrlProtocol:
+        """
+        Получить корректный протокол для url
+        requests
+
+        :param protocol: ``Protocol``
+            .. Протокол: http, https, socks4, socks5
+
+        :param returns: ``str``
+            .. Возвращает протокол для url
+        """
+        return 'https' if 'socks' in protocol else protocol
+
+
+    @staticmethod
+    def cast_to_string(prepared: list[PreparedProxy]) -> list[PreparedProxy]:
+        """
+        Преобразовать отдельные элементы
+        прокси из обработанного массива (
+        через prepare_results) в строки
+
+        :param prepared: ``list``
+            .. Список обработанных прокси
+
+        :param returns: ``list``
+            .. Список прокси в виде строки;
+        """
+        return [
+            f"{proxy.protocol}://{proxy.proxy} {proxy.country}"
+            for proxy in prepared
+        ]
+
+
+    @staticmethod
+    def get_headers() -> dict:
+        return {
+            "User-Agent": UserAgent().random,
+            "Accept": "*/*",
+            "Proxy-Connection": "Keep-Alive"
+        }
+
+
+    def set_logger(self, logger):
+        """
+        Установить свой логгер
+
+        :param logger:
+            .. Объект логгера
+
+        :param returns: ``None``
+            .. Ничего не возвращает
+        """
+        self.logger = logger
+
+
+    def set_workers(self, workers: int):
+        """
+        Установить "воркеров" - количество
+        параллельных запросов
+
+        В зависимости от количества
+        получаемых типов (протоколов)
+        будет увеличиваться/уменьшатся
+        скорость работы скрипта
+
+        Чем меньше необходимо получить
+        типов (протоколов) прокси, тем
+        выше скорость скрипта
+
+        :param workers: ``int``
+            .. Количество параллельных запросов
+               Минимум 1
+
+        :param returns: ``None``
+            .. Ничего не возвращает;
+        """
+        self.workers = workers if workers else 1
+
+
+    def set_country(self, country: Country):
+        """
+        Установить фильтр по стране
+
+        :param country: ``Country``
+            .. Какую страну(ы) включать
+               на выход из проверок
+
+        :param returns: ``None``
+            .. Ничего не возвращает;
+        """
+        self.country = country
+
+
+    def set_protocols(self, protocols: Protocols):
+        """
+        Установить фильтр по протоколам
+
+        :param protocols: ``Protocols``
+            .. Какой протоколы включать
+               на выход из проверок
+
+        :param returns: ``None``
+            .. Ничего не возвращает;
+        """
+        self.protocols = protocols
+
+
+    async def exc(
+            self,
+            protocol: Protocol,
+            proxy: ProxyString,
+            url: str
+    ) -> ExceptedProxy:
+        """
+        Определить не рабочий прокси;
+        -----------------------------
+        .. Делает запрос через aiohttp
+           и, с помощью exceptions, определяет
+           что прокси рабочий или нет
+
+        :param protocol: ``Protocol``
+            .. Протокол, по которому обращаться к прокси
+
+        :param proxy: ``ProxyString``
+            .. Сам прокси
+
+        :param url: ``str``
+            .. Ссылка на ресурс, на который
+               будет делаться запрос
+
+        :param returns: ``None``
+            .. This is returns
+               Description;
+        """
+        # Заголовки
+        headers = ProxiesTaster.get_headers()
 
         invalid_result = protocol, False, False, False
 
@@ -315,40 +374,36 @@ class ProxiesTaster:
             self.logger.error(f"Port value '{port}' must be in range 0-65535")
             return invalid_result
 
-        # В зависимости от протокола, разные способ
-        # использования прокси
-        if protocol == "http":
-            kwargs = {}
-        else:
-            kwargs = {
-                "connector": ProxyConnector.from_url(f"{protocol}://{proxy}")
-            }
-
         # Продолжаем проверку прокси
-        async with aiohttp.ClientSession(**kwargs) as session:
-            try:
+        async with aiohttp.ClientSession(
                 # В зависимости от протокола, разные способ
                 # использования прокси
-                if "connector" in kwargs:
-                    getArgs = [url]
-                    getKwargs = {
-                        "headers": headers,
-                        "timeout": 10
-                    }
-                else:
-                    getArgs = [url]
-                    getKwargs = {
-                        "headers": headers,
-                        "timeout": 10,
-                        "proxy": f"{protocol}://{proxy}"
-                    }
+                **{} if protocol == 'http' else {
+                    "connector": ProxyConnector.from_url(
+                        f"{protocol}://{proxy}"
+                    )
+                }
+        ) as session:
+            try:
+                # Общие параметры для прокси
+                kwargs = {
+                    "headers": headers,
+                    "timeout": 10
+                }
 
                 # Получаем ответ от сервера
-                response = await session.get(*getArgs, **getKwargs)
-            except except_errors:
-                # Если где-то на прошлом этапе произошла ошибка,
-                # то прокси не работает
-                return invalid_result
+                response = await session.get(
+                    *[url],
+                    # В зависимости от протокола, разные способ
+                    # использования прокси
+                    **kwargs if protocol != 'http' else {
+                        **kwargs, **{
+                            "proxy": f"{protocol}://{proxy}"
+                        }
+                    }
+                )
+            except self.except_errors as e:
+                pass
             except AttributeError as error:
                 # Выделяем определенную ошибку, которая возникает
                 # при неправильной работе прокси (AttributeError) и
@@ -361,20 +416,18 @@ class ProxiesTaster:
                 # Иначе просто выводим исключыение
                 raise error
             else:
-                # Тут примерно такая же проверка
-                # Из-за того, что response.text() делает доп запрос на сервер
-                # для получения данных
                 try:
                     return protocol, proxy, response, await response.text()
-                except except_errors:
-                    # Иначе возвращаем то, что прокси не работает
-                    return invalid_result
+                except self.except_errors:
+                    pass
 
         return invalid_result
 
 
-    async def check_proxy_and_define_protocol(
-            self, proxy: ProxyString
+    async def check(
+            self,
+            proxy: ProxyString,
+            protocol: Union[Protocol, False] = False
     ) -> Union[bool, CheckedProxy]:
         """
         Проверяет прокси на роботоспособность
@@ -393,129 +446,73 @@ class ProxiesTaster:
                и расположение (результат ответа от ipinfo.io)
         """
 
+        # Сайт который будет выдавать
+        # информацию по прокси (страну, ip и т.д.)
         site = "ipinfo.io/json"
-
-        # Генерируем 4 корутины для создания
-        # 4х асинхронных запросов, которые определят
-
-        # Запускаем 4 запроса и ожидаем ответа
-        result: list[ExceptedProxy] = await asyncio.gather(
-            # Типы прокси
-            *[
-                self.except_proxy(
-                    "socks4", proxy,
-                    f"{ProxiesTaster.get_url_protocol('socks4')}://{site}"
-                ),
-                self.except_proxy(
-                    "socks5", proxy,
-                    f"{ProxiesTaster.get_url_protocol('socks5')}://{site}"
-                ),
-                self.except_proxy(
-                    "http", proxy,
-                    f"{ProxiesTaster.get_url_protocol('http')}://{site}"
-                ),
-                self.except_proxy(
-                    "https", proxy,
-                    f"{ProxiesTaster.get_url_protocol('https')}://{site}"
-                )
-            ]
-        )
 
         # Функция, которая конвертирует данные
         # для возврата из функции
-        def get_result_data(
-                protocol: Protocol,
-                proxy: ProxyString,
-                response: ClientResponse,
-                text: str
-        ):
-            if response.status == 200:
-                data = response
-            else:
-                data = {
-                    "status": response.status
-                }
+        async def get_result_data(protocol, proxy, site):
+            # Получаем проверенный прокси
+            data = await self.exc(
+                protocol, proxy,
+                f"{ProxiesTaster.get_url_protocol(protocol)}://{site}"
+            )
 
-            return {
-                "status": response.status,
-                "proxy": proxy,
-                "protocol": protocol,
-                "data": data,
-                "text": text
-            }
+            if data[1]:
+                return CheckedProxy(
+                    data[0],        # Protocol
+                    data[1],        # Proxy
+                    data[2].status, # Status
+                    data[2],        # Data
+                    data[3]         # Text
+                )
 
-        # socks4
-        if result[0][1]:
-            return get_result_data(*result[0])
+            return False
 
-        # socks5
-        if result[1][1]:
-            return get_result_data(*result[1])
+        if not protocol:
+            # Protocol in string
+            if (protocol := proxy.split('://'))[0] in [
+                    'socks5',
+                    'socks4',
+                    'http',
+                    'https'
+            ]:
+                if protocol[0] in self.protocols:
+                    if result := await get_result_data(
+                            protocol[0], proxy, site
+                    ):
+                        return result
+                    return False
 
-        # https
-        if result[3][1]:
-            return get_result_data(*result[3])
+            # SOCKS5
+            if 'socks5' in self.protocols:
+                if result := await get_result_data('socks5', proxy, site):
+                    return result
 
-        # http
-        if result[2][1]:
-            return get_result_data(*result[2])
+            # SOCKS4
+            if 'socks4' in self.protocols:
+                if result := await get_result_data('socks4', proxy, site):
+                    return result
+
+            # HTTPS
+            if 'https' in self.protocols:
+                if result := await get_result_data('https', proxy, site):
+                    return result
+
+            # HTTP
+            if 'http' in self.protocols:
+                if result := await get_result_data('http', proxy, site):
+                    return result
+        elif protocol in self.protocols:
+            if result := await get_result_data(protocol, proxy, site):
+                return result
 
         # Если прокси не работает
         return False
 
 
-    async def check_proxy(
-            self,
-            protocol: Protocol,
-            proxy: ProxyString
-    ) -> Union[bool, CheckedProxy]:
-        """
-        Проверяет прокси на работоспособность
-        также выдает его расположение
-
-        :param protocol: ``str``
-            .. Сетевой протокол, по которому
-               работает прокси: http, https, socks4, socks5
-
-        :param proxy: ``str``
-            .. Сам прокси: ip:port
-
-        :param returns: ``False | dict[str, str]``
-            .. Ответ от ipinfo.io и сам прокси
-               Если не работает - False
-        """
-
-        # Проверяем прокси
-        checked = await self.except_proxy(
-            protocol,
-            proxy,
-            f"{ProxiesTaster.get_url_protocol(protocol)}://ipinfo.io/json"
-        )
-
-        # Если работает
-        if checked[1]:
-            if checked[2].status == 200:
-                data = checked[2]
-            else:
-                data = {
-                    "status": checked[2].status
-                }
-
-            return {
-                "status": checked[2].status,
-                "proxy": proxy,
-                "protocol": protocol,
-                "data": data,
-                "text": checked[3]
-            }
-
-        # Если нет
-        return False
-
-
-    async def check_and_define_protocol_proxies(
-            self, proxies: Proxies
-    ) -> list[CheckedProxy]:
+    async def check_all(self, proxies: Proxies) -> list[CheckedProxy]:
         """
         Проверяет список прокси и определяет
         их протокол
@@ -533,17 +530,14 @@ class ProxiesTaster:
         result = []
 
         for proxy in proxies:
-            if isinstance(proxy, str):
-                defined = await self.check_proxy_and_define_protocol(
-                    proxy
-                )
-            elif isinstance(proxy, dict):
-                defined = await self.check_proxy(
-                    proxy["protocol"], proxy["proxy"]
-                )
+            match proxy:
+                case str():
+                    defined = await self.check(proxy)
+                case ProxyDict():
+                    defined = await self.check(proxy.proxy, proxy.protocol)
 
             if defined:
-                proxy = proxy["proxy"] if "proxy" in proxy else proxy
+                proxy = proxy.proxy if "proxy" in proxy else proxy
                 self.logger.info(f"Proxy '{proxy}' work")
                 self.logger.debug(f"Proxy '{proxy}' work data: '{defined}")
                 result.append(defined)
@@ -569,10 +563,12 @@ class ProxiesTaster:
         count_proxies: int = len(self.proxies)
         count_proxies_in_worker: int = round(count_proxies / self.workers)
 
-        try:
-            remainder_proxies: int = count_proxies % count_proxies_in_worker
-        except ZeroDivisionError:
-            remainder_proxies = 0
+        # Получаем прокси которые
+        # не вошли в основные списки
+        # (остатки)
+        remainder_proxies: int = 0
+        if count_proxies_in_worker > 0:
+            remainder_proxies = count_proxies % count_proxies_in_worker
 
         worker_proxy: Proxies = []
 
@@ -582,19 +578,23 @@ class ProxiesTaster:
 
             if len(worker_proxy) >= count_proxies_in_worker:
                 if len(tasks) == self.workers - 1 and remainder_proxies:
-                    worker_proxy.append(proxy)
+                    match proxy:
+                        case str():
+                            worker_proxy.append(proxy)
+                        case ProxyDict():
+                            worker_proxy.append(proxy)
+                        case list():
+                            worker_proxy.append(ProxyDict(*proxy))
+                        case dict():
+                            worker_proxy.append(ProxyDict(**proxy))
 
-                tasks.append(
-                    self.check_and_define_protocol_proxies(
-                        worker_proxy
-                    )
-                )
+                tasks.append(self.check_all(worker_proxy))
                 worker_proxy = []
 
         return tasks
 
 
-    def country_proxy_filter(self, prepared: list) -> list:
+    def country_filter(self, prepared: list) -> list:
         """
         Фильтровать обработанные прокси
         (через функцию prepare_results)
@@ -606,54 +606,41 @@ class ProxiesTaster:
         :param returns: ``list``
             .. Отфильтрованные прокси;
         """
-
+        # Здесь будут отфильтрованные
+        # прокси
         filtered = []
+
+        # Если вообще имеются
+        # параметр для фильтрации
         if self.country:
+            # Перебираем прокси
             for proxy in prepared:
-                if proxy['country'] and proxy['country'] in self.country:
+                if proxy.country and proxy.country in self.country:
                     filtered.append(proxy)
         else:
+            # Иначе просто возвращаем
+            # неотфильтрованные значения
             return prepared
 
         return filtered
 
 
-    def type_proxy_filter(self, prepared: list) -> list:
-        """
-        Фильтровать обработанные прокси
-        (через функцию prepare_results)
-        по их типу (протоколу, socks4, socks5, http...)
-
-        :param prepared: ``list``
-            .. Список обработанных прокси
-
-        :param returns: ``list``
-            .. Отфильтрованные прокси;
-        """
-        filtered = []
-        if self.type:
-            for proxy in prepared:
-                if proxy['protocol'] in self.type:
-                    filtered.append(proxy)
-        else:
-            return prepared
-
-        return filtered
-
-
-    async def get_excepted(self) -> list:
+    async def get_excepted(self) -> list[CheckedProxy]:
         """
         Получаем проверенные прокси
 
         :param returns: ``list``
             .. Проверенные прокси;
         """
+        # Получаем распределенные по задачам
+        # прокси (по параллельным запросам)
+        # и запускаем их всех
         return await asyncio.gather(
             *self.get_tasks()
         )
 
 
-    async def get_prepared(self) -> list:
+    async def get_prepared(self) -> list[PreparedProxy]:
         """
         Получает проверенные прокси,
         исключает те, которые не вернули
@@ -667,49 +654,55 @@ class ProxiesTaster:
         # Сортировка и доп проверка
         prepared = []
 
+        # Перебираем пачки проверенных прокси
         for proxies in await self.get_excepted():
+            # Перебираем проверенные прокси
             for proxy in proxies:
-                if proxy["status"] == 200:
-                    # Устанавливаем значения по
-                    # умолчанию для новых параметров
-                    proxy['parsed_text'] = {}
-                    proxy['country'] = ''
-
-                    # Если ошибка при получаении данных м сервиса
-                    if proxy["text"]:
-                        try:
-                            # Parsed text
-                            proxy['parsed_text'] = json.loads(
-                                proxy["text"]
-                            )
-
-                            # Country
-                            proxy['country'] = proxy[
-                                'parsed_text'
-                            ]['country']
-                        except Exception:
-                            # То не добавляем в список
-                            continue
-                    else:
+                # Если он рабочий даже без
+                # авторизации и других условий,
+                # то продолжаем обработку
+                if proxy.status == 200:
+                    # Распределяем полученные параметры
+                    response = False
+                    try:
+                        response = json.loads(proxy.text)
+                    except ValueError:
                         continue
+                    finally:
+                        country = False
+                        if response:
+                            country = response['country']
 
-                    prepared.append(proxy)
+                        prepared.append(
+                            PreparedProxy(
+                                proxy.protocol,
+                                proxy.proxy,
+                                proxy.status,
+                                proxy.data,
+                                proxy.text,
+                                response,
+                                country
+                            )
+                        )
 
         return prepared
 
 
-    async def run(self):
+    async def run(self) -> list:
         """
         Запустить проверку
 
-        :param returns: ``None``
-            .. Ничего не возвращает;
+        :param returns: ``list``
+            .. Возвращает обработанные прокси;
         """
-        self.prepared = self.country_proxy_filter(
-            self.type_proxy_filter(
-                await self.get_prepared()
-            )
+        # Целиком запускем проверку, обработку и
+        # фильтрацию переданных прокси
+        # Устанавливаем их в свойство
+        self.prepared = self.country_filter(
+            await self.get_prepared()
         )
+
+        return self.prepared
 
 
     def get(self) -> list:
