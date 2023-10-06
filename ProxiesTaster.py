@@ -16,10 +16,65 @@ import argparse
 from colorama import init
 
 # ProxiesTaster
-from include.taster import ProxiesTaster
+from src.taster import ProxiesTaster
+from src.taster import WorkedProxy
 
 # My logger
-from include.logger import setting_logging
+from src.logger import setting_logging
+
+
+def country_filter(countries: list[str]):
+    """
+    Фильтр по стране для прокси
+
+    :param countries: ``list[str]`` - default: []
+        .. Список доступных стран (по-умолчанию все)
+
+    :param returns: ``Callable[WorkedProxy, bool]``
+        .. Возвращает функцию, которая
+           будет фильтровать
+    """
+    def filt(proxy: WorkedProxy):
+        if not countries:
+            return True
+
+        if not proxy.country:
+            return False
+
+        return proxy.country in countries
+
+    return filt
+
+
+def status_codes_filter(codes: list[int]):
+    """
+    Фильтр по кодам ответов HTTP
+
+    :param codes: ``list[int]``
+        .. Список допустимых кодов
+
+    :param returns: ``Callable[WorkedProxy, bool]``
+        .. Функция-фильтр;
+    """
+    def filt(proxy: WorkedProxy):
+        return True if not codes else proxy.status in codes
+
+    return filt
+
+
+def string_cast(proxy: WorkedProxy) -> str:
+    """
+    Преобразовывает рабочий прокси
+    в строку
+
+    :param proxy: ``WorkedProxy``
+        .. Рабочий прокси
+
+    :param returns: ``str``
+        .. Преобразованный в
+           строку прокси
+    """
+    return f"{proxy.status} {proxy.protocol}://{proxy.proxy} {proxy.country}"
 
 
 async def main():
@@ -75,17 +130,7 @@ async def main():
         default=200
     )
 
-    # Какую страну выделять
-    parser.add_argument(
-        "--country",
-        "-c",
-        nargs='+',
-        type=str,
-        help="get by country (write locale: RU, US, UA, EN...) (default - [] (ALL))",
-        default=[]
-    )
-
-    # Какую страну выделять
+    # По каким протоколам фильтровать
     parser.add_argument(
         "--protocols",
         "-p",
@@ -98,6 +143,27 @@ async def main():
             'https',
             'http'
         ]
+    )
+
+    # По какой стране фильтровать
+    parser.add_argument(
+        "--countries",
+        "-c",
+        nargs='+',
+        type=str,
+        help="filter by countries (write locale: RU, US...) (default - (ALL))",
+        default=[]
+    )
+
+    # По каким кодам ответов
+    # HTTP фильтровать
+    parser.add_argument(
+        "--status-codes",
+        '-sc',
+        nargs='+',
+        type=int,
+        help="filter by HTTP status codes (default = (ALL))",
+        default=[]
     )
 
     # Файл с конфигом
@@ -147,10 +213,9 @@ async def main():
     args = parser.parse_args()
 
     # Получаем возможный ввод из pipeline
-    if select.select([sys.stdin, ], [], [], 0.0)[0]:
-        getted_stdin = sys.stdin.read()
-    else:
-        getted_stdin = ""
+    getted_stdin = "" if not select.select(
+        [sys.stdin, ], [], [], 0.0
+    )[0] else sys.stdin.read()
 
     # Проверяем откуда был вывод
     if not args.proxies and getted_stdin:
@@ -179,24 +244,28 @@ async def main():
     if args.logformat:
         logkwargs["format"] = args.logformat
 
-    if args.verbose:
-        FLOGGER, DLOGGER = setting_logging(args.logconfig, **logkwargs)
-
     # Объект проверяльщика прокси
     taster = ProxiesTaster(proxies)
 
-    # Добавляем настройки и фильтры
+    # Его настройки
     taster.set_workers(args.workers)
-    taster.set_country(args.country)
     taster.set_protocols(args.protocols)
     if args.verbose:
+        FLOGGER, DLOGGER = setting_logging(args.logconfig, **logkwargs)
         taster.set_logger(DLOGGER)
 
-    # Конвертируем все элементы в строки
-    results = ProxiesTaster.cast_to_string(
-        # Получаем результат проверки
-        await taster.run()
+
+    # Получаем прокси, фильтруем их
+    # и преобразуем в строки
+    results = map(
+        string_cast, filter(
+            status_codes_filter(args.status_codes), filter(
+                country_filter(args.countries),
+                await taster.run()
+            )
+        )
     )
+
 
     # Сохраняем в файл
     if args.out:

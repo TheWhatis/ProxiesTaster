@@ -6,9 +6,9 @@ proxies.txt
 out.txt
 bin/
 logs/
-include/__pycache__
-include/python*
+include/
 *.txt
 proxies/
 valid.txt
 proxies.json
+src/__pycache__
