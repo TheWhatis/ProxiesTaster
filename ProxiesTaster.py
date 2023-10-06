@@ -285,5 +285,6 @@ async def main():
             for proxy in results:
                 valid_proxy.write("\n" + proxy)
 
+
 if __name__ == "__main__":
     asyncio.run(main())
