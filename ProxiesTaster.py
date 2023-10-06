@@ -21,6 +21,7 @@ from include.taster import ProxiesTaster
 # My logger
 from include.logger import setting_logging
 
+
 async def main():
     """
     Основная функция;
@@ -86,12 +87,17 @@ async def main():
 
     # Какую страну выделять
     parser.add_argument(
-        "--type",
-        "-t",
+        "--protocols",
+        "-p",
         nargs='+',
         type=str,
-        help="get the country type (default - [] (ALL))",
-        default=[]
+        help="get by protocol (default - (ALL))",
+        default=[
+            'socks5',
+            'socks4',
+            'https',
+            'http'
+        ]
     )
 
     # Файл с конфигом
@@ -125,6 +131,16 @@ async def main():
         "-lf",
         type=str,
         help="log format"
+    )
+
+    # Выводить ли расширенную
+    # информацию
+    parser.add_argument(
+        '--verbose',
+        '-v',
+        help='Do should show extended work info',
+        action='store_true',
+        default=False
     )
 
     # Получаем аргументы
@@ -163,32 +179,39 @@ async def main():
     if args.logformat:
         logkwargs["format"] = args.logformat
 
-    FLOGGER, DLOGGER = setting_logging(args.logconfig, **logkwargs)
+    if args.verbose:
+        FLOGGER, DLOGGER = setting_logging(args.logconfig, **logkwargs)
 
     # Объект проверяльщика прокси
-    taster = ProxiesTaster(
-        proxies,
-        args.workers,
-        args.country,
-        args.type
+    taster = ProxiesTaster(proxies)
+
+    # Добавляем настройки и фильтры
+    taster.set_workers(args.workers)
+    taster.set_country(args.country)
+    taster.set_protocols(args.protocols)
+    if args.verbose:
+        taster.set_logger(DLOGGER)
+
+    # Конвертируем все элементы в строки
+    results = ProxiesTaster.cast_to_string(
+        # Получаем результат проверки
+        await taster.run()
     )
-    taster.set_logger(DLOGGER)
-
-    # Запускаем проверку
-    await taster.run()
-
-    # Получаем результат работы
-    results = ProxiesTaster.cast_to_string(taster.get())
 
     # Сохраняем в файл
     if args.out:
-        DLOGGER.info(f"Write result in '{args.out}'")
+        if args.verbose:
+            DLOGGER.info(f"Write result in '{args.out}'")
         with open(args.out, "w", encoding="uTF-8") as valid_proxy:
             valid_proxy.write("\n".join(results))
 
     # Добавляем в файл
     if args.append:
-        DLOGGER.info(f"Append to file end result; Filename is '{args.append}'")
+        if args.verbose:
+            DLOGGER.info(
+                f"Append to file end result; Filename is '{args.append}'"
+            )
+
         with open(args.append, "a", encoding="UTF-8") as valid_proxy:
             for proxy in results:
                 valid_proxy.write("\n" + proxy)

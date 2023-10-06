@@ -7,6 +7,8 @@ out.txt
 bin/
 logs/
 include/__pycache__
+include/python*
 *.txt
 proxies/
 valid.txt
+proxies.json
