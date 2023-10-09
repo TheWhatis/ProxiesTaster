@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+
+<html lang="ru" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Package &#8212; документация ProxiesTaster 1.0.0</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=4f649999" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=039e1c02" />
+    <script src="_static/documentation_options.js?v=e35015f7"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/translations.js?v=29b1f277"></script>
+    <link rel="index" title="Алфавитный указатель" href="genindex.html" />
+    <link rel="search" title="Поиск" href="search.html" />
+    <link rel="next" title="ProxiesTaster" href="package/ProxiesTaster.html" />
+    <link rel="prev" title="App" href="app.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="package">
+<h1>Package<a class="headerlink" href="#package" title="Link to this heading">¶</a></h1>
+<p><strong>Установка</strong></p>
+<p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">proxies-taster</span></code></p>
+<p><strong>Использование</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Подключаем модуль</span>
+<span class="kn">from</span> <span class="nn">proxies_taster</span> <span class="kn">import</span> <span class="n">ProxiesTaster</span>
+<span class="kn">from</span> <span class="nn">proxies_taster</span> <span class="kn">import</span> <span class="n">ProxyDict</span>
+
+<span class="c1"># Список прокси</span>
+<span class="n">proxies</span> <span class="o">=</span> <span class="p">[</span>
+     <span class="s1">&#39;184.178.172.28:15294&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;142.54.226.214:4145&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;174.77.111.196:4145&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;72.195.114.169:4145&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;184.95.235.194:1080&#39;</span><span class="p">,</span>
+     <span class="n">ProxyDict</span><span class="p">(</span>
+         <span class="n">protocol</span> <span class="o">=</span> <span class="s1">&#39;socks4&#39;</span><span class="p">,</span>
+         <span class="n">proxy</span> <span class="o">=</span> <span class="s1">&#39;125.141.139.112:5566&#39;</span>
+     <span class="p">)</span>
+<span class="p">]</span>
+
+<span class="c1"># Иницилизируем класс</span>
+<span class="n">taster</span> <span class="o">=</span> <span class="n">ProxiesTaster</span><span class="p">(</span><span class="n">proxies</span><span class="p">)</span>
+
+<span class="c1"># Устанавливаем настройки</span>
+<span class="n">taster</span><span class="o">.</span><span class="n">set_protocols</span><span class="p">([</span><span class="s1">&#39;socks4&#39;</span><span class="p">,</span> <span class="s1">&#39;socks5&#39;</span><span class="p">,</span> <span class="s1">&#39;https&#39;</span><span class="p">])</span>
+<span class="n">taster</span><span class="o">.</span><span class="n">set_workers</span><span class="p">(</span><span class="mi">300</span><span class="p">)</span>
+
+<span class="c1"># Также доступы установки</span>
+<span class="c1"># обработчиков на разные события</span>
+<span class="n">taster</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="s1">&#39;error&#39;</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">event</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="n">event</span><span class="p">))</span>
+<span class="n">taster</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="s1">&#39;check.error&#39;</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">event</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="n">event</span><span class="p">))</span>
+
+<span class="n">taster</span><span class="o">.</span><span class="n">on</span><span class="p">(</span>
+    <span class="s1">&#39;check.success&#39;</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">event</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;Proxy is working </span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="n">proxy</span><span class="o">.</span><span class="n">proxy</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="package/ProxiesTaster.html">ProxiesTaster</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="package/ProxiesTaster.html#proxies_taster.ProxiesTaster"><code class="docutils literal notranslate"><span class="pre">ProxiesTaster</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="package/types.html">Types</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="package/types.html#proxies_taster.types.Protocol"><code class="docutils literal notranslate"><span class="pre">Protocol</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="package/types.html#proxies_taster.types.Proxies"><code class="docutils literal notranslate"><span class="pre">Proxies</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="package/types.html#proxies_taster.types.ProxyDict"><code class="docutils literal notranslate"><span class="pre">ProxyDict</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="package/types.html#proxies_taster.types.UrlProtocol"><code class="docutils literal notranslate"><span class="pre">UrlProtocol</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="package/types.html#proxies_taster.types.WorkedProxy"><code class="docutils literal notranslate"><span class="pre">WorkedProxy</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="package/events_data.html">Events</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="package/events_data.html#proxies_taster.events_data.End"><code class="docutils literal notranslate"><span class="pre">End</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="package/events_data.html#proxies_taster.events_data.Error"><code class="docutils literal notranslate"><span class="pre">Error</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="package/events_data.html#proxies_taster.events_data.Event"><code class="docutils literal notranslate"><span class="pre">Event</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="package/events_data.html#proxies_taster.events_data.Proxy"><code class="docutils literal notranslate"><span class="pre">Proxy</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="package/events_data.html#proxies_taster.events_data.ProxyError"><code class="docutils literal notranslate"><span class="pre">ProxyError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="package/events_data.html#proxies_taster.events_data.ProxySuccess"><code class="docutils literal notranslate"><span class="pre">ProxySuccess</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="package/events_data.html#proxies_taster.events_data.RunEnd"><code class="docutils literal notranslate"><span class="pre">RunEnd</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="package/events_data.html#proxies_taster.events_data.RunStart"><code class="docutils literal notranslate"><span class="pre">RunStart</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="package/events_data.html#proxies_taster.events_data.Start"><code class="docutils literal notranslate"><span class="pre">Start</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="package/events_data.html#proxies_taster.events_data.Success"><code class="docutils literal notranslate"><span class="pre">Success</span></code></a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">ProxiesTaster</a></h1>
+
+
+
+
+
+
+
+
+<h3>Навигация</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="app.html">App</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="package/ProxiesTaster.html">ProxiesTaster</a></li>
+<li class="toctree-l2"><a class="reference internal" href="package/types.html">Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="package/events_data.html">Events</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="app.html" title="предыдущая глава">App</a></li>
+      <li>Next: <a href="package/ProxiesTaster.html" title="следующая глава">ProxiesTaster</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Быстрый поиск</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Искать" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, Whatis.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+      |
+      <a href="_sources/package.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

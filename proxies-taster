@@ -16,23 +16,23 @@ import argparse
 from colorama import init
 
 # ProxiesTaster
-from src.taster import ProxiesTaster
-from src.taster import WorkedProxy
+from proxies_taster import ProxiesTaster
+from proxies_taster import WorkedProxy
 
 # My logger
-from src.logger import setting_logging
+from logger import setting_logging
 
 
 def country_filter(countries: list[str]):
     """
     Фильтр по стране для прокси
 
-    :param countries: ``list[str]`` - default: []
-        .. Список доступных стран (по-умолчанию все)
+    :param countries: Список доступных стран (по-умолчанию все)
+    :type countries: list[str] - default: []
 
-    :param returns: ``Callable[WorkedProxy, bool]``
-        .. Возвращает функцию, которая
-           будет фильтровать
+    :return: Возвращает функцию,
+        которая будет фильтровать
+    :rtype: Callable[WorkedProxy, bool]
     """
     def filt(proxy: WorkedProxy):
         if not countries:
@@ -50,11 +50,11 @@ def status_codes_filter(codes: list[int]):
     """
     Фильтр по кодам ответов HTTP
 
-    :param codes: ``list[int]``
-        .. Список допустимых кодов
+    :param codes: Список допустимых кодов
+    :type codes: list[int]
 
-    :param returns: ``Callable[WorkedProxy, bool]``
-        .. Функция-фильтр;
+    :return: Функция-фильтр
+    :rtype: Callable[WorkedProxy, bool]
     """
     def filt(proxy: WorkedProxy):
         return True if not codes else proxy.status in codes
@@ -67,24 +67,52 @@ def string_cast(proxy: WorkedProxy) -> str:
     Преобразовывает рабочий прокси
     в строку
 
-    :param proxy: ``WorkedProxy``
-        .. Рабочий прокси
+    :param proxy: Рабочий прокси
+    :type proxy: WorkedProxy
 
-    :param returns: ``str``
-        .. Преобразованный в
-           строку прокси
+    :return: Преобразованный в
+        строку прокси
+    :rtype: str
     """
     return f"{proxy.status} {proxy.protocol}://{proxy.proxy} {proxy.country}"
 
 
+def parse_proxies(proxies: str) -> list[str]:
+    """
+    Парсим список прокси
+
+    :param proxies: Получаем прокси, разделенные
+        переводом строки или пробелом
+    :type proxies: str
+
+    :return: Возвращает распаршенный
+        список прокси
+    :rtype: list[str]
+
+    **Пример работы**
+
+    .. code-block:: python
+
+        proxies = parse_proxies('72.195.34.59:4145 43.248.27.8:4646')
+    """
+    proxies = proxies.strip().split("\n")
+    return list(
+        set(
+            sum(
+                [proxy.split(
+                    ',' if ',' in proxy else ' '
+                ) for proxy in proxies], []
+            )
+        )
+    )
+
 async def main():
     """
     Основная функция;
-    -----------------
-    .. Запускается, если
-       программа была запущена
-       через терминал (а не как модуль)
 
+    Запускается, если
+    программа была запущена
+    через терминал (а не как модуль)
     """
     # Иницилизация colorama
     init()
@@ -92,14 +120,14 @@ async def main():
     # Основные аргументы
     # Парсим входные аргументы
     parser = argparse.ArgumentParser(
-        description="Check proxies on connection and define it protocol"
+        description="Скрипт, позволяющий проверить все переданные прокси"
     )
 
     # Название файла, откуда получаем прокси
     parser.add_argument(
         "proxies",
         type=str,
-        help="path to file with proxies or just proxies (delimiter is \\n)",
+        help="Путь до файла со списком прокси, либо просто список прокси (разделенные переводом строки или пробелом)",
         nargs="?"
     )
 
@@ -109,7 +137,7 @@ async def main():
         "--out",
         "-o",
         type=str,
-        help="path to file, where put script work result"
+        help="Путь до файла, в который необходимо записать результат"
     )
 
     # Куда добавлять рабочие и
@@ -118,7 +146,7 @@ async def main():
         "--append",
         "-a",
         type=str,
-        help="path to a file, where append to end work result by line"
+        help="Добавить полученный результат в конец переданного файла"
     )
 
     # Количество асинхронных запросов
@@ -126,7 +154,7 @@ async def main():
         "--workers",
         "-w",
         type=int,
-        help="count async tasks (workers); default - 200",
+        help="Количество \"воркеров\" - асинхронных запросов",
         default=200
     )
 
@@ -136,7 +164,7 @@ async def main():
         "-p",
         nargs='+',
         type=str,
-        help="get by protocol (default - (ALL))",
+        help="Фильтр по протоколам прокси (socks4, socks4 и т.д.)",
         default=[
             'socks5',
             'socks4',
@@ -151,7 +179,7 @@ async def main():
         "-c",
         nargs='+',
         type=str,
-        help="filter by countries (write locale: RU, US...) (default - (ALL))",
+        help="Фильтр по странам (необходимо вводить локаль: RU, EN, US и т.д.)",
         default=[]
     )
 
@@ -162,7 +190,7 @@ async def main():
         '-sc',
         nargs='+',
         type=int,
-        help="filter by HTTP status codes (default = (ALL))",
+        help="Фильтр по HTTP кодам ответов от прокси (по-умолчанию все)",
         default=[]
     )
 
@@ -171,7 +199,7 @@ async def main():
         "--logconfig",
         "-lc",
         type=str,
-        help="path to log config in json format",
+        help="Путь до конфига для вывода логов",
         default="log.config.json"
     )
 
@@ -180,7 +208,7 @@ async def main():
         "--logdir",
         "-ld",
         type=str,
-        help="log dir (which to save .log files)"
+        help="В какую директорию сохранять файлы логов"
     )
 
     # Уровень логироания
@@ -188,7 +216,7 @@ async def main():
         "--loglevel",
         "-ll",
         type=str,
-        help="log level (debug, critical, info e.t.c.) only stdout"
+        help="Уровень вывода логов (debug, critical, info и т.д.) только для вывода в терминал (stdout)"
     )
 
     # Формат логов
@@ -204,7 +232,7 @@ async def main():
     parser.add_argument(
         '--verbose',
         '-v',
-        help='Do should show extended work info',
+        help='Расширенный вывод информации о работе скрипта',
         action='store_true',
         default=False
     )
@@ -224,14 +252,11 @@ async def main():
         parser.error("Argument 'proxies' is positional argument")
 
     # Получаем прокси из файла (если файл)
-    if "\n" not in args.proxies:
-        if os.path.exists(args.proxies):
-            with open(args.proxies, "r", encoding="UTF-8") as proxies_file:
-                proxies = proxies_file.read().strip().split("\n")
-        else:
-            raise "Undefined list proxy or file with list proxy is not exists"
+    if os.path.exists(args.proxies):
+        with open(args.proxies, "r", encoding="UTF-8") as proxies_file:
+            proxies = parse_proxies(proxies_file.read())
     else:
-        proxies = args.proxies.strip().split("\n")
+        proxies = parse_proxies(args.proxies)
 
     # Define log config
     logkwargs = {}
@@ -244,28 +269,43 @@ async def main():
     if args.logformat:
         logkwargs["format"] = args.logformat
 
+    FLOGGER, DLOGGER = setting_logging(args.logconfig, **logkwargs)
+
     # Объект проверяльщика прокси
     taster = ProxiesTaster(proxies)
 
     # Его настройки
     taster.set_workers(args.workers)
     taster.set_protocols(args.protocols)
-    if args.verbose:
-        FLOGGER, DLOGGER = setting_logging(args.logconfig, **logkwargs)
-        taster.set_logger(DLOGGER)
-
+    
+    # Установка обработчиков
+    taster.on(
+        'error', lambda event: event.message
+        and DLOGGER.error(event.message)
+    )
+    taster.on(
+        'check.error', lambda event: event.level == 'not work'
+        and DLOGGER.info(f"Proxy dont work {event.proxy}"),
+    )
+    taster.on(
+        'check.success', lambda event: [
+            DLOGGER.info(f"Proxy work {event.proxy.proxy}"),
+            DLOGGER.debug(f"Work proxy data {event.proxy}"),
+        ]
+    )
 
     # Получаем прокси, фильтруем их
     # и преобразуем в строки
-    results = map(
-        string_cast, filter(
-            status_codes_filter(args.status_codes), filter(
-                country_filter(args.countries),
-                await taster.run()
+    results = list(
+        map(
+            string_cast, filter(
+                status_codes_filter(args.status_codes), filter(
+                    country_filter(args.countries),
+                    await taster.run()
+                )
             )
         )
     )
-
 
     # Сохраняем в файл
     if args.out:
@@ -284,6 +324,9 @@ async def main():
         with open(args.append, "a", encoding="UTF-8") as valid_proxy:
             for proxy in results:
                 valid_proxy.write("\n" + proxy)
+
+    for proxy in results:
+        print(proxy)
 
 
 if __name__ == "__main__":

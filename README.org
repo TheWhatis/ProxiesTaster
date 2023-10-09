@@ -1,0 +1,7 @@
+* ProxiesTaster
+Пакет/скрипт для работы с прокси
+
++ [[file:docs/_build/html/index.html][Wiki]]
++ [[file:docs/_build/html/package.html][Пакет]]
++ [[file:docs/_build/html/app.html][Скрипт/Приложение]]
+

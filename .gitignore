@@ -12,3 +12,6 @@ proxies/
 valid.txt
 proxies.json
 src/__pycache__
+*.egg*
+proxies_taster/__pycache__
+__pycache__

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+
+<html lang="ru" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>App &#8212; документация ProxiesTaster 1.0.0</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=4f649999" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=039e1c02" />
+    <script src="_static/documentation_options.js?v=e35015f7"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/translations.js?v=29b1f277"></script>
+    <link rel="index" title="Алфавитный указатель" href="genindex.html" />
+    <link rel="search" title="Поиск" href="search.html" />
+    <link rel="next" title="Package" href="package.html" />
+    <link rel="prev" title="ProxiesTaster документация!" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="app">
+<h1>App<a class="headerlink" href="#app" title="Link to this heading">¶</a></h1>
+<p>Простой прокси-чекер, написанный
+на языке python с использованием
+asyncio</p>
+<p>Приложение позволяет быстро проверить
+переданный список прокси</p>
+<p><strong>Установка</strong></p>
+<p>Для установки необходимо скопировать репозиторий
+на ваш компьютер <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">https://www.github.com/ThwWhatis/ProxiesTaster</span></code>,
+далее перейти в директорию, куда установлен скрипт и установить
+зависимости <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-r</span> <span class="pre">requirements.txt</span></code></p>
+<p><strong>Список аргументов:</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">proxies</span><span class="o">-</span><span class="n">taster</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">out</span> <span class="n">OUT</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">append</span> <span class="n">APPEND</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">workers</span> <span class="n">WORKERS</span><span class="p">]</span>
+                       <span class="p">[</span><span class="o">--</span><span class="n">protocols</span> <span class="n">PROTOCOLS</span> <span class="p">[</span><span class="n">PROTOCOLS</span> <span class="o">...</span><span class="p">]]</span> <span class="p">[</span><span class="o">--</span><span class="n">countries</span> <span class="n">COUNTRIES</span> <span class="p">[</span><span class="n">COUNTRIES</span> <span class="o">...</span><span class="p">]]</span>
+                       <span class="p">[</span><span class="o">--</span><span class="n">status</span><span class="o">-</span><span class="n">codes</span> <span class="n">STATUS_CODES</span> <span class="p">[</span><span class="n">STATUS_CODES</span> <span class="o">...</span><span class="p">]]</span> <span class="p">[</span><span class="o">--</span><span class="n">logconfig</span> <span class="n">LOGCONFIG</span><span class="p">]</span>
+                       <span class="p">[</span><span class="o">--</span><span class="n">logdir</span> <span class="n">LOGDIR</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">loglevel</span> <span class="n">LOGLEVEL</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">logformat</span> <span class="n">LOGFORMAT</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">verbose</span><span class="p">]</span>
+                       <span class="p">[</span><span class="n">proxies</span><span class="p">]</span>
+
+ <span class="n">Скрипт</span><span class="p">,</span> <span class="n">позволяющий</span> <span class="n">проверить</span> <span class="n">все</span> <span class="n">переданные</span> <span class="n">прокси</span>
+
+ <span class="n">positional</span> <span class="n">arguments</span><span class="p">:</span>
+   <span class="n">proxies</span>               <span class="n">Путь</span> <span class="n">до</span> <span class="n">файла</span> <span class="n">со</span> <span class="n">списком</span> <span class="n">прокси</span><span class="p">,</span> <span class="n">либо</span> <span class="n">просто</span> <span class="n">список</span> <span class="n">прокси</span> <span class="p">(</span><span class="n">разделенные</span>
+                         <span class="n">переводом</span> <span class="n">строки</span> <span class="n">или</span> <span class="n">пробелом</span><span class="p">)</span>
+
+ <span class="n">options</span><span class="p">:</span>
+   <span class="o">-</span><span class="n">h</span><span class="p">,</span> <span class="o">--</span><span class="n">help</span>            <span class="n">show</span> <span class="n">this</span> <span class="n">help</span> <span class="n">message</span> <span class="ow">and</span> <span class="n">exit</span>
+   <span class="o">--</span><span class="n">out</span> <span class="n">OUT</span><span class="p">,</span> <span class="o">-</span><span class="n">o</span> <span class="n">OUT</span>     <span class="n">Путь</span> <span class="n">до</span> <span class="n">файла</span><span class="p">,</span> <span class="n">в</span> <span class="n">который</span> <span class="n">необходимо</span> <span class="n">записать</span> <span class="n">результат</span>
+   <span class="o">--</span><span class="n">append</span> <span class="n">APPEND</span><span class="p">,</span> <span class="o">-</span><span class="n">a</span> <span class="n">APPEND</span>
+                         <span class="n">Добавить</span> <span class="n">полученный</span> <span class="n">результат</span> <span class="n">в</span> <span class="n">конец</span> <span class="n">переданного</span> <span class="n">файла</span>
+   <span class="o">--</span><span class="n">workers</span> <span class="n">WORKERS</span><span class="p">,</span> <span class="o">-</span><span class="n">w</span> <span class="n">WORKERS</span>
+                         <span class="n">Количество</span> <span class="s2">&quot;воркеров&quot;</span> <span class="o">-</span> <span class="n">асинхронных</span> <span class="n">запросов</span>
+   <span class="o">--</span><span class="n">protocols</span> <span class="n">PROTOCOLS</span> <span class="p">[</span><span class="n">PROTOCOLS</span> <span class="o">...</span><span class="p">],</span> <span class="o">-</span><span class="n">p</span> <span class="n">PROTOCOLS</span> <span class="p">[</span><span class="n">PROTOCOLS</span> <span class="o">...</span><span class="p">]</span>
+                         <span class="n">Фильтр</span> <span class="n">по</span> <span class="n">протоколам</span> <span class="n">прокси</span> <span class="p">(</span><span class="n">socks4</span><span class="p">,</span> <span class="n">socks4</span> <span class="n">и</span> <span class="n">т</span><span class="o">.</span><span class="n">д</span><span class="o">.</span><span class="p">)</span>
+   <span class="o">--</span><span class="n">countries</span> <span class="n">COUNTRIES</span> <span class="p">[</span><span class="n">COUNTRIES</span> <span class="o">...</span><span class="p">],</span> <span class="o">-</span><span class="n">c</span> <span class="n">COUNTRIES</span> <span class="p">[</span><span class="n">COUNTRIES</span> <span class="o">...</span><span class="p">]</span>
+                         <span class="n">Фильтр</span> <span class="n">по</span> <span class="n">странам</span> <span class="p">(</span><span class="n">необходимо</span> <span class="n">вводить</span> <span class="n">локаль</span><span class="p">:</span> <span class="n">RU</span><span class="p">,</span> <span class="n">EN</span><span class="p">,</span> <span class="n">US</span> <span class="n">и</span> <span class="n">т</span><span class="o">.</span><span class="n">д</span><span class="o">.</span><span class="p">)</span>
+   <span class="o">--</span><span class="n">status</span><span class="o">-</span><span class="n">codes</span> <span class="n">STATUS_CODES</span> <span class="p">[</span><span class="n">STATUS_CODES</span> <span class="o">...</span><span class="p">],</span> <span class="o">-</span><span class="n">sc</span> <span class="n">STATUS_CODES</span> <span class="p">[</span><span class="n">STATUS_CODES</span> <span class="o">...</span><span class="p">]</span>
+                         <span class="n">Фильтр</span> <span class="n">по</span> <span class="n">HTTP</span> <span class="n">кодам</span> <span class="n">ответов</span> <span class="n">от</span> <span class="n">прокси</span> <span class="p">(</span><span class="n">по</span><span class="o">-</span><span class="n">умолчанию</span> <span class="n">все</span><span class="p">)</span>
+   <span class="o">--</span><span class="n">logconfig</span> <span class="n">LOGCONFIG</span><span class="p">,</span> <span class="o">-</span><span class="n">lc</span> <span class="n">LOGCONFIG</span>
+                         <span class="n">Путь</span> <span class="n">до</span> <span class="n">конфига</span> <span class="n">для</span> <span class="n">вывода</span> <span class="n">логов</span>
+   <span class="o">--</span><span class="n">logdir</span> <span class="n">LOGDIR</span><span class="p">,</span> <span class="o">-</span><span class="n">ld</span> <span class="n">LOGDIR</span>
+                         <span class="n">В</span> <span class="n">какую</span> <span class="n">директорию</span> <span class="n">сохранять</span> <span class="n">файлы</span> <span class="n">логов</span>
+   <span class="o">--</span><span class="n">loglevel</span> <span class="n">LOGLEVEL</span><span class="p">,</span> <span class="o">-</span><span class="n">ll</span> <span class="n">LOGLEVEL</span>
+                         <span class="n">Уровень</span> <span class="n">вывода</span> <span class="n">логов</span> <span class="p">(</span><span class="n">debug</span><span class="p">,</span> <span class="n">critical</span><span class="p">,</span> <span class="n">info</span> <span class="n">и</span> <span class="n">т</span><span class="o">.</span><span class="n">д</span><span class="o">.</span><span class="p">)</span> <span class="n">только</span> <span class="n">для</span> <span class="n">вывода</span> <span class="n">в</span>
+                         <span class="n">терминал</span> <span class="p">(</span><span class="n">stdout</span><span class="p">)</span>
+   <span class="o">--</span><span class="n">logformat</span> <span class="n">LOGFORMAT</span><span class="p">,</span> <span class="o">-</span><span class="n">lf</span> <span class="n">LOGFORMAT</span>
+                         <span class="n">log</span> <span class="nb">format</span>
+   <span class="o">--</span><span class="n">verbose</span><span class="p">,</span> <span class="o">-</span><span class="n">v</span>         <span class="n">Расширенный</span> <span class="n">вывод</span> <span class="n">информации</span> <span class="n">о</span> <span class="n">работе</span> <span class="n">скрипта</span>
+</pre></div>
+</div>
+<p><strong>Пример использования</strong></p>
+<p>Для начана необходимо сделать скрипт
+исполняемым <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">chmod</span> <span class="pre">ugo+x</span> <span class="pre">proxies-taster</span></code>
+(если на linux)</p>
+<p>Далее вы можете создат alias для запуска
+скрипта из любого расположения <code class="docutils literal notranslate"><span class="pre">alias</span> <span class="pre">proxies-taster=/path/to/proxies-taster</span></code>
+(если на linux)</p>
+<p>С простой передачей прокси:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">proxies</span><span class="o">-</span><span class="n">taster</span> <span class="s1">&#39;72.195.34.59:4145 43.248.27.8:4646&#39;</span> <span class="o">--</span><span class="n">verbose</span> <span class="o">--</span><span class="n">out</span> <span class="n">valid</span><span class="o">.</span><span class="n">txt</span>
+<span class="n">proxies</span><span class="o">-</span><span class="n">taster</span> <span class="mf">72.195.34.59</span><span class="p">:</span><span class="mi">4145</span><span class="p">,</span><span class="mf">43.248.27.8</span><span class="p">:</span><span class="mi">4646</span> <span class="o">--</span><span class="n">verbose</span> <span class="o">--</span><span class="n">out</span> <span class="n">valid</span><span class="o">.</span><span class="n">txt</span>
+</pre></div>
+</div>
+<p>Прокси из файла .txt:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">proxies</span><span class="o">-</span><span class="n">taster</span> <span class="n">proxies</span><span class="o">.</span><span class="n">txt</span> <span class="o">--</span><span class="n">verbose</span> <span class="o">--</span><span class="n">append</span> <span class="n">valid</span><span class="o">.</span><span class="n">txt</span>
+</pre></div>
+</div>
+<p>Или с помощью pipe:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cat</span> <span class="n">proxies</span><span class="o">.</span><span class="n">txt</span> <span class="o">|</span> <span class="n">proxies</span><span class="o">-</span><span class="n">taster</span> <span class="o">--</span><span class="n">verbose</span> <span class="o">--</span><span class="n">append</span> <span class="n">valid</span><span class="o">.</span><span class="n">txt</span>
+</pre></div>
+</div>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">ProxiesTaster</a></h1>
+
+
+
+
+
+
+
+
+<h3>Навигация</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">App</a></li>
+<li class="toctree-l1"><a class="reference internal" href="package.html">Package</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="предыдущая глава">ProxiesTaster документация!</a></li>
+      <li>Next: <a href="package.html" title="следующая глава">Package</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Быстрый поиск</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Искать" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, Whatis.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+      |
+      <a href="_sources/app.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
