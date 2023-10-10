@@ -1,34 +1,34 @@
 # Файл для установки, компиляции и т.д. скрипта
 
-LIBDIR = /usr/lib
 SCRIPT = proxies-taster
-DISTDIR = /usr/bin
+DESTDIR = /opt/proxies-taster
+LIBDIR = ${DESTDIR}
+
+LINKPATH = /usr/local/bin/${SCRIPT}
 
 install:
-	pip install proxies-taster logging colorama
+	sudo chmod ugo+x proxies-taster; \
+	pip install proxies-taster logging colorama --break-system-packages; \
 
-	if [ ! -d "${LIBDIR}" ]; then
-		sudo mkdir -p "${LIBDIR}"
-	fi
-	sudo cp proxies_parser_logger.py "${LIBDIR/proxies_parser_logger.py}"
-	sudo cp proxies-taster "${DIST}/${SCRIPT}"
+	if [ ! -d "${LIBDIR}" ]; then \
+	    sudo mkdir -p "${LIBDIR}"; \
+	fi; \
+	sudo cp proxies_parser_logger.py "${LIBDIR}/proxies_parser_logger.py"; \
+	sudo cp proxies-taster "${DESTDIR}/${SCRIPT}"; \
+
+	sudo ln -s "${DESTDIR}/${SCRIPT}" "${LINKPATH}"
 install-dev:
-	pip install -r requirements.txt
+	sudo chmod ugo+x proxies-taster; \
+	pip install -r requirements.txt --break-system-packages \
 
-	if [ ! -d "${LIBDIR}" ]; then
-		sudo mkdir -p "${LIBDIR}"
-	fi
-	sudo cp proxies_parser_logger.py "${LIBDIR/proxies_parser_logger.py}"
-	sudo cp proxies-taster "${DIST}/${SCRIPT}"
+	if [ ! -d "${LIBDIR}" ]; then \
+	    sudo mkdir -p "${LIBDIR}"; \
+	fi; \
+	sudo cp proxies_parser_logger.py "${LIBDIR/proxies_parser_logger.py}"; \
+	sudo cp proxies-taster "${DESTDIR}/${SCRIPT}"; \
+
+	sudo ln -s "${DESTDIR}/${SCRIPT}" "${LINKPATH}"
 uninstall:
-	sudo rm "${DIST}/${SCRIPT}"
-	sudo rm "${LIBDIR/proxies_parser_logger.py}"
-
-	pip uninstall proxies-taster -y
-	if [ -z $(pip show logging | grep ^Required-by | sed 's/Required-by://') ]; then
-		pip uninstall logging -y
-	fi
-
-	if [ -z $(pip show colorama | grep ^Required-by | sed 's/Required-by://') ]; then
-		pip uninstall colorama -y
-	fi
+	sudo rm "${LINKPATH}"
+	sudo rm "${DESTDIR}/${SCRIPT}"; \
+	sudo rm "${LIBDIR}/proxies_parser_logger.py"; \
