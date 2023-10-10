@@ -5,7 +5,7 @@ SCRIPT = proxies-taster
 DISTDIR = /usr/bin
 
 install:
-	pip install proxies-taster logging colorama -y
+	pip install proxies-taster logging colorama
 
 	if [ ! -d "${LIBDIR}" ]; then
 		sudo mkdir -p "${LIBDIR}"
