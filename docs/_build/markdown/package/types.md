@@ -28,12 +28,6 @@ alias of `list`[`Union`[`str`, [`ProxyDict`](#proxies_taster.types.ProxyDict)]]
 
 #### proxy*: str*
 
-### proxies_taster.types.UrlProtocol
-
-Доступные протоколы HTTP
-
-alias of `Literal`[„http“, „https“]
-
 ### *class* proxies_taster.types.WorkedProxy(protocol: Literal['http', 'https', 'socks4', 'socks5'], proxy: str, response: ClientResponse, status: int, body: dict | str, country: str | False)
 
 Базовые классы: [`ProxyDict`](#proxies_taster.types.ProxyDict)

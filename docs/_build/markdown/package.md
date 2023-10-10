@@ -51,7 +51,6 @@ taster.on(
   * [`Protocol`](package/types.md#proxies_taster.types.Protocol)
   * [`Proxies`](package/types.md#proxies_taster.types.Proxies)
   * [`ProxyDict`](package/types.md#proxies_taster.types.ProxyDict)
-  * [`UrlProtocol`](package/types.md#proxies_taster.types.UrlProtocol)
   * [`WorkedProxy`](package/types.md#proxies_taster.types.WorkedProxy)
 * [Events](package/events_data.md)
   * [`End`](package/events_data.md#proxies_taster.events_data.End)
