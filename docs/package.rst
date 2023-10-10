@@ -45,6 +45,10 @@ Package
        )
    )
 
+   # Запускаем проверку и
+   # получаем результат
+   proxies = await taster.run()
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:

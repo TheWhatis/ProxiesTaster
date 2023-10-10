@@ -42,6 +42,10 @@ taster.on(
         f"Proxy is working {event.proxy.proxy}"
     )
 )
+
+# Запускаем проверку и
+# получаем результат
+proxies = await taster.run()
 ```
 
 # Contents:
