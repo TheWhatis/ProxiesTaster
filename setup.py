@@ -5,6 +5,7 @@ from setuptools import setup
 import os
 import json
 
+name = 'proxies-taster'
 version = '1.0.0'
 
 long_description = '''Пакет который позволяет быстро проверить,
@@ -15,7 +16,7 @@ url = 'https://github.com/TheWhatis/ProxiesTaster'
 
 if __name__ == '__main__':
     setup(
-        name = 'proxies_taster',
+        name = name,
         version = version,
 
         author = 'Whatis',
@@ -27,7 +28,7 @@ if __name__ == '__main__':
         long_description_content_type = 'text/markdown',
 
         url = url,
-        download_url = f"{url}/archives/{version}.zip",
+        download_url = f"{url}/dist/{name}-{version}.zip",
 
         packages = ['proxies_taster'],
         install_requires = [
