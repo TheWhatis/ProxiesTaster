@@ -28,7 +28,7 @@ alias of `list`[`Union`[`str`, [`ProxyDict`](#proxies_taster.types.ProxyDict)]]
 
 #### proxy*: str*
 
-### *class* proxies_taster.types.WorkedProxy(protocol: Literal['http', 'https', 'socks4', 'socks5'], proxy: str, response: ClientResponse, status: int, body: dict | str, country: str | False)
+### *class* proxies_taster.types.WorkedProxy(protocol: Literal['http', 'https', 'socks4', 'socks5'], proxy: str, url: str, response: ClientResponse, status: int, body: dict | str, country: str | False)
 
 Базовые классы: [`ProxyDict`](#proxies_taster.types.ProxyDict)
 
@@ -36,6 +36,7 @@ alias of `list`[`Union`[`str`, [`ProxyDict`](#proxies_taster.types.ProxyDict)]]
 были проверены
 
 * **Параметры:**
+  * **url** (*str*) – Ссылка на прокси
   * **response** (*ClientResponse*) – Объект ответа от сервера
   * **status** (*int*) – Http код ответа
   * **body** (*Union**[**dict**,* *str**]*) – Тело ответа
@@ -48,3 +49,5 @@ alias of `list`[`Union`[`str`, [`ProxyDict`](#proxies_taster.types.ProxyDict)]]
 #### response*: ClientResponse*
 
 #### status*: int*
+
+#### url*: str*

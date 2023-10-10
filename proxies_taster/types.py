@@ -35,6 +35,9 @@ class WorkedProxy(ProxyDict):
     Класс для прокси которые
     были проверены
 
+    :param url: Ссылка на прокси
+    :type url: str
+
     :param response: Объект ответа от сервера
     :type response: ClientResponse
 
