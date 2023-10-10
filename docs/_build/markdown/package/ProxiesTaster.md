@@ -89,12 +89,12 @@ result = await taster.check('107.174.66.231:36626', 'https')
 result = await taster.exc('socks4', '107.174.66.231:36626')
 ```
 
-#### on(event: str, listener: Callable[[[Event](events_data.md#proxies_taster.events_data.Event)], Any])
+#### on(event: [Events](events_data.md#proxies_taster.events_data.Events), listener: Callable[[[Event](events_data.md#proxies_taster.events_data.Event)], Any])
 
 Установить обработчик события
 
 * **Параметры:**
-  * **event** (*str*) – Название события
+  * **event** ([*Events*](events_data.md#proxies_taster.events_data.Events)) – Название события
   * **listener** (*Callable**[**[*[*Event*](events_data.md#proxies_taster.events_data.Event)*]**,* *None**]*) – Обработчик этого события
 * **Результат:**
   Ничего не возвращает
@@ -104,14 +104,20 @@ result = await taster.exc('socks4', '107.174.66.231:36626')
 **Пример работы**
 
 ```python
+# Подключаем enum с константами событий
+from proxies_taster.events_data import Events
+
 def print_data(data):
     print(data.name, data)
 
 # Можно установить лямбду
-taster.on('error', lambda event: logger.error(event.message))
+taster.on(
+    Events.error,
+    lambda event: logger.error(event.message)
+)
 
 # Или функцию
-taster.on('check.start', print_data)
+taster.on(Events.check, print_data)
 ```
 
 #### *async* run()

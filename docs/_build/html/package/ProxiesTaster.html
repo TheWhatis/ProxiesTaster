@@ -136,12 +136,12 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="proxies_taster.ProxiesTaster.on">
-<span class="sig-name descname"><span class="pre">on</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">listener</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="events_data.html#proxies_taster.events_data.Event" title="proxies_taster.events_data.Event"><span class="pre">Event</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#proxies_taster.ProxiesTaster.on" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">on</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="events_data.html#proxies_taster.events_data.Events" title="proxies_taster.events_data.Events"><span class="pre">Events</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">listener</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="events_data.html#proxies_taster.events_data.Event" title="proxies_taster.events_data.Event"><span class="pre">Event</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#proxies_taster.ProxiesTaster.on" title="Link to this definition">¶</a></dt>
 <dd><p>Установить обработчик события</p>
 <dl class="field-list simple">
 <dt class="field-odd">Параметры<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>event</strong> (<em>str</em>) – Название события</p></li>
+<li><p><strong>event</strong> (<a class="reference internal" href="events_data.html#proxies_taster.events_data.Events" title="proxies_taster.events_data.Events"><em>Events</em></a>) – Название события</p></li>
 <li><p><strong>listener</strong> (<em>Callable</em><em>[</em><em>[</em><a class="reference internal" href="events_data.html#proxies_taster.events_data.Event" title="proxies_taster.events_data.Event"><em>Event</em></a><em>]</em><em>, </em><em>None</em><em>]</em>) – Обработчик этого события</p></li>
 </ul>
 </dd>
@@ -153,14 +153,20 @@
 </dd>
 </dl>
 <p><strong>Пример работы</strong></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">print_data</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Подключаем enum с константами событий</span>
+<span class="kn">from</span> <span class="nn">proxies_taster.events_data</span> <span class="kn">import</span> <span class="n">Events</span>
+
+<span class="k">def</span> <span class="nf">print_data</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
 
 <span class="c1"># Можно установить лямбду</span>
-<span class="n">taster</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="s1">&#39;error&#39;</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">event</span><span class="p">:</span> <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">message</span><span class="p">))</span>
+<span class="n">taster</span><span class="o">.</span><span class="n">on</span><span class="p">(</span>
+    <span class="n">Events</span><span class="o">.</span><span class="n">error</span><span class="p">,</span>
+    <span class="k">lambda</span> <span class="n">event</span><span class="p">:</span> <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">message</span><span class="p">)</span>
+<span class="p">)</span>
 
 <span class="c1"># Или функцию</span>
-<span class="n">taster</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="s1">&#39;check.start&#39;</span><span class="p">,</span> <span class="n">print_data</span><span class="p">)</span>
+<span class="n">taster</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">Events</span><span class="o">.</span><span class="n">check</span><span class="p">,</span> <span class="n">print_data</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>

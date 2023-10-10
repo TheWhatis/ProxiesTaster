@@ -1,13 +1,70 @@
+# Typing
 from typing import Any
 from typing import Union
 from typing import Literal
 
+# Dataclass
 from dataclasses import dataclass
 
+# Enum
+from enum import Enum
+
+# Types
 from .types import WorkedProxy
 
 from .types import Proxies
 from .types import Protocol
+
+
+class Events(Enum):
+    """
+    Набор констант с событиями,
+    которые имеются в ProxiesTaster
+
+    :param error: Общее событие ошибки,
+        вызывается всегда когда возникает
+        ошибка, во всех методах
+    :type error: str
+
+    :param except_: Начало работы метода `taster.exc`
+    :type except_: str
+
+    :param except_end: Окончание работы метода `taster.exc`
+    :type except_end: str
+
+    :param except_success: Успешное завершение
+        работы метода `taster.exc` (прокси
+        был получен)
+    :type except_success: str
+
+    :param except_error: Какая-либо ошибка при
+        работе метода `taster.exc`
+    :type except_error: str
+
+    :param check: Начало работы метода `taster.check`
+    :type check: str
+
+    :param check_end: Конец работы метода `taster.check`
+    :type check_end: str
+
+    :param check_success: Успешное завершение
+        работы метода `taster.check` (прокси
+        был получен)
+    :type success: str
+
+    :param check_error: Какая-либо ошибка при
+        работе метода `taster.check`
+    :type check_error: str
+    """
+    error: str          = 'error'
+    except_: str        = 'except.start'
+    except_end: str     = 'except.end'
+    except_success: str = 'except.success'
+    except_error: str   = 'except.error'
+    check: str          = 'check.start'
+    check_end: str      = 'check.end'
+    check_success: str  = 'check.success'
+    check_error: str    = 'check.error'
 
 
 @dataclass

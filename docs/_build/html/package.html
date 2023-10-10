@@ -40,6 +40,7 @@
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Подключаем модуль</span>
 <span class="kn">from</span> <span class="nn">proxies_taster</span> <span class="kn">import</span> <span class="n">ProxiesTaster</span>
 <span class="kn">from</span> <span class="nn">proxies_taster</span> <span class="kn">import</span> <span class="n">ProxyDict</span>
+<span class="kn">from</span> <span class="nn">proxies_taster.events_data</span> <span class="kn">import</span> <span class="n">Events</span>
 
 <span class="c1"># Список прокси</span>
 <span class="n">proxies</span> <span class="o">=</span> <span class="p">[</span>
@@ -63,11 +64,11 @@
 
 <span class="c1"># Также доступы установки</span>
 <span class="c1"># обработчиков на разные события</span>
-<span class="n">taster</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="s1">&#39;error&#39;</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">event</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="n">event</span><span class="p">))</span>
-<span class="n">taster</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="s1">&#39;check.error&#39;</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">event</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="n">event</span><span class="p">))</span>
+<span class="n">taster</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">Events</span><span class="o">.</span><span class="n">error</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">event</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="n">event</span><span class="p">))</span>
+<span class="n">taster</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">Events</span><span class="o">.</span><span class="n">check_error</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">event</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="n">event</span><span class="p">))</span>
 
 <span class="n">taster</span><span class="o">.</span><span class="n">on</span><span class="p">(</span>
-    <span class="s1">&#39;check.success&#39;</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">event</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span>
+    <span class="n">Events</span><span class="o">.</span><span class="n">check_success</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">event</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span>
         <span class="sa">f</span><span class="s2">&quot;Proxy is working </span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="n">proxy</span><span class="o">.</span><span class="n">proxy</span><span class="si">}</span><span class="s2">&quot;</span>
     <span class="p">)</span>
 <span class="p">)</span>
@@ -91,6 +92,7 @@
 <li class="toctree-l2"><a class="reference internal" href="package/events_data.html#proxies_taster.events_data.End"><code class="docutils literal notranslate"><span class="pre">End</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="package/events_data.html#proxies_taster.events_data.Error"><code class="docutils literal notranslate"><span class="pre">Error</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="package/events_data.html#proxies_taster.events_data.Event"><code class="docutils literal notranslate"><span class="pre">Event</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="package/events_data.html#proxies_taster.events_data.Events"><code class="docutils literal notranslate"><span class="pre">Events</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="package/events_data.html#proxies_taster.events_data.Proxy"><code class="docutils literal notranslate"><span class="pre">Proxy</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="package/events_data.html#proxies_taster.events_data.ProxyError"><code class="docutils literal notranslate"><span class="pre">ProxyError</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="package/events_data.html#proxies_taster.events_data.ProxySuccess"><code class="docutils literal notranslate"><span class="pre">ProxySuccess</span></code></a></li>

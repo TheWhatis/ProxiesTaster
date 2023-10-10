@@ -44,6 +44,50 @@
 
 #### name*: str*
 
+### *class* proxies_taster.events_data.Events(value, names=None, \*, module=None, qualname=None, type=None, start=1, boundary=None)
+
+Базовые классы: `Enum`
+
+Набор констант с событиями,
+которые имеются в ProxiesTaster
+
+* **Параметры:**
+  * **error** (*str*) – Общее событие ошибки,
+    вызывается всегда когда возникает
+    ошибка, во всех методах
+  * **except** (*str*) – Начало работы метода taster.exc
+  * **except_end** (*str*) – Окончание работы метода taster.exc
+  * **except_success** (*str*) – Успешное завершение
+    работы метода taster.exc (прокси
+    был получен)
+  * **except_error** (*str*) – Какая-либо ошибка при
+    работе метода taster.exc
+  * **check** (*str*) – Начало работы метода taster.check
+  * **check_end** (*str*) – Конец работы метода taster.check
+  * **check_success** – Успешное завершение
+    работы метода taster.check (прокси
+    был получен)
+  * **check_error** (*str*) – Какая-либо ошибка при
+    работе метода taster.check
+
+#### check*: str* *= 'check.start'*
+
+#### check_end*: str* *= 'check.end'*
+
+#### check_error*: str* *= 'check.error'*
+
+#### check_success*: str* *= 'check.success'*
+
+#### error*: str* *= 'error'*
+
+#### except_*: str* *= 'except.start'*
+
+#### except_end*: str* *= 'except.end'*
+
+#### except_error*: str* *= 'except.error'*
+
+#### except_success*: str* *= 'except.success'*
+
 ### *class* proxies_taster.events_data.Proxy(name: str, protocol: Literal['http', 'https', 'socks4', 'socks5'], proxy: str | [WorkedProxy](types.md#proxies_taster.types.WorkedProxy))
 
 Базовые классы: [`Event`](#proxies_taster.events_data.Event)

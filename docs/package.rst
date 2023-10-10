@@ -12,6 +12,7 @@ Package
    # Подключаем модуль
    from proxies_taster import ProxiesTaster
    from proxies_taster import ProxyDict
+   from proxies_taster.events_data import Events
 
    # Список прокси
    proxies = [
@@ -35,15 +36,15 @@ Package
 
    # Также доступы установки
    # обработчиков на разные события
-   taster.on('error', lambda event: print(event))
-   taster.on('check.error', lambda event: print(event))
+   taster.on(Events.error, lambda event: print(event))
+   taster.on(Events.check_error, lambda event: print(event))
 
    taster.on(
-       'check.success', lambda event: print(
+       Events.check_success, lambda event: print(
            f"Proxy is working {event.proxy.proxy}"
        )
    )
-   
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:

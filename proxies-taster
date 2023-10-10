@@ -16,6 +16,7 @@ from colorama import init
 # ProxiesTaster
 from proxies_taster import ProxiesTaster
 from proxies_taster import WorkedProxy
+from proxies_taster.events_data import Events
 
 # My logger
 from proxies_parser_logger import setting_logging
@@ -276,15 +277,15 @@ async def main():
 
     # Установка обработчиков
     taster.on(
-        'error', lambda event: event.message
+        Events.error, lambda event: event.message
         and DLOGGER.error(event.message)
     )
     taster.on(
-        'check.error', lambda event: event.level == 'not work'
+        Events.check_error, lambda event: event.level == 'not work'
         and DLOGGER.info(f"Proxy dont work {event.proxy}"),
     )
     taster.on(
-        'check.success', lambda event: [
+        Events.check_success, lambda event: [
             DLOGGER.info(f"Proxy work {event.proxy.proxy}"),
             DLOGGER.debug(f"Work proxy data {event.proxy}"),
         ]

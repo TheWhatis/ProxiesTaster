@@ -47,6 +47,7 @@ from .types import Proxies
 from .types import WorkedProxy
 
 # Events
+from .events_data import Events
 from .events_data import Event
 
 from .events_data import Start
@@ -276,14 +277,14 @@ class ProxiesTaster:
 
     def on(
             self,
-            event: str,
+            event: Events,
             listener: Callable[[Event], Any]
     ):
         """
         Установить обработчик события
 
         :param event: Название события
-        :type event: str
+        :type event: Events
 
         :param listener: Обработчик этого события
         :type listener: Callable[[Event], None]
@@ -295,16 +296,22 @@ class ProxiesTaster:
 
         .. code-block:: python
 
+            # Подключаем enum с константами событий
+            from proxies_taster.events_data import Events
+
             def print_data(data):
                 print(data.name, data)
 
             # Можно установить лямбду
-            taster.on('error', lambda event: logger.error(event.message))
+            taster.on(
+                Events.error,
+                lambda event: logger.error(event.message)
+            )
 
             # Или функцию
-            taster.on('check.start', print_data)
+            taster.on(Events.check, print_data)
         """
-        self.emitter.on(event, listener)
+        self.emitter.on(event.value, listener)
 
     @events_wrap('except', 1, 2)
     async def exc(

@@ -10,6 +10,7 @@
 # Подключаем модуль
 from proxies_taster import ProxiesTaster
 from proxies_taster import ProxyDict
+from proxies_taster.events_data import Events
 
 # Список прокси
 proxies = [
@@ -33,11 +34,11 @@ taster.set_workers(300)
 
 # Также доступы установки
 # обработчиков на разные события
-taster.on('error', lambda event: print(event))
-taster.on('check.error', lambda event: print(event))
+taster.on(Events.error, lambda event: print(event))
+taster.on(Events.check_error, lambda event: print(event))
 
 taster.on(
-    'check.success', lambda event: print(
+    Events.check_success, lambda event: print(
         f"Proxy is working {event.proxy.proxy}"
     )
 )
@@ -56,6 +57,7 @@ taster.on(
   * [`End`](package/events_data.md#proxies_taster.events_data.End)
   * [`Error`](package/events_data.md#proxies_taster.events_data.Error)
   * [`Event`](package/events_data.md#proxies_taster.events_data.Event)
+  * [`Events`](package/events_data.md#proxies_taster.events_data.Events)
   * [`Proxy`](package/events_data.md#proxies_taster.events_data.Proxy)
   * [`ProxyError`](package/events_data.md#proxies_taster.events_data.ProxyError)
   * [`ProxySuccess`](package/events_data.md#proxies_taster.events_data.ProxySuccess)

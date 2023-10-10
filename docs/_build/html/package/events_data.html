@@ -103,6 +103,82 @@
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="proxies_taster.events_data.Events">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">proxies_taster.events_data.</span></span><span class="sig-name descname"><span class="pre">Events</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#proxies_taster.events_data.Events" title="Link to this definition">¶</a></dt>
+<dd><p>Базовые классы: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<p>Набор констант с событиями,
+которые имеются в ProxiesTaster</p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>error</strong> (<em>str</em>) – Общее событие ошибки,
+вызывается всегда когда возникает
+ошибка, во всех методах</p></li>
+<li><p><strong>except</strong> (<em>str</em>) – Начало работы метода <cite>taster.exc</cite></p></li>
+<li><p><strong>except_end</strong> (<em>str</em>) – Окончание работы метода <cite>taster.exc</cite></p></li>
+<li><p><strong>except_success</strong> (<em>str</em>) – Успешное завершение
+работы метода <cite>taster.exc</cite> (прокси
+был получен)</p></li>
+<li><p><strong>except_error</strong> (<em>str</em>) – Какая-либо ошибка при
+работе метода <cite>taster.exc</cite></p></li>
+<li><p><strong>check</strong> (<em>str</em>) – Начало работы метода <cite>taster.check</cite></p></li>
+<li><p><strong>check_end</strong> (<em>str</em>) – Конец работы метода <cite>taster.check</cite></p></li>
+<li><p><strong>check_success</strong> – Успешное завершение
+работы метода <cite>taster.check</cite> (прокси
+был получен)</p></li>
+<li><p><strong>check_error</strong> (<em>str</em>) – Какая-либо ошибка при
+работе метода <cite>taster.check</cite></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="proxies_taster.events_data.Events.check">
+<span class="sig-name descname"><span class="pre">check</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'check.start'</span></em><a class="headerlink" href="#proxies_taster.events_data.Events.check" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="proxies_taster.events_data.Events.check_end">
+<span class="sig-name descname"><span class="pre">check_end</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'check.end'</span></em><a class="headerlink" href="#proxies_taster.events_data.Events.check_end" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="proxies_taster.events_data.Events.check_error">
+<span class="sig-name descname"><span class="pre">check_error</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'check.error'</span></em><a class="headerlink" href="#proxies_taster.events_data.Events.check_error" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="proxies_taster.events_data.Events.check_success">
+<span class="sig-name descname"><span class="pre">check_success</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'check.success'</span></em><a class="headerlink" href="#proxies_taster.events_data.Events.check_success" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="proxies_taster.events_data.Events.error">
+<span class="sig-name descname"><span class="pre">error</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'error'</span></em><a class="headerlink" href="#proxies_taster.events_data.Events.error" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="proxies_taster.events_data.Events.except_">
+<span class="sig-name descname"><span class="pre">except_</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'except.start'</span></em><a class="headerlink" href="#proxies_taster.events_data.Events.except_" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="proxies_taster.events_data.Events.except_end">
+<span class="sig-name descname"><span class="pre">except_end</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'except.end'</span></em><a class="headerlink" href="#proxies_taster.events_data.Events.except_end" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="proxies_taster.events_data.Events.except_error">
+<span class="sig-name descname"><span class="pre">except_error</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'except.error'</span></em><a class="headerlink" href="#proxies_taster.events_data.Events.except_error" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="proxies_taster.events_data.Events.except_success">
+<span class="sig-name descname"><span class="pre">except_success</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'except.success'</span></em><a class="headerlink" href="#proxies_taster.events_data.Events.except_success" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="proxies_taster.events_data.Proxy">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">proxies_taster.events_data.</span></span><span class="sig-name descname"><span class="pre">Proxy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">protocol</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'http'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'https'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'socks4'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'socks5'</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proxy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="types.html#proxies_taster.types.WorkedProxy" title="proxies_taster.types.WorkedProxy"><span class="pre">WorkedProxy</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#proxies_taster.events_data.Proxy" title="Link to this definition">¶</a></dt>
 <dd><p>Базовые классы: <a class="reference internal" href="#proxies_taster.events_data.Event" title="proxies_taster.events_data.Event"><code class="xref py py-class docutils literal notranslate"><span class="pre">Event</span></code></a></p>
