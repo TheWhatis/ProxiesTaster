@@ -72,7 +72,7 @@ def string_cast(proxy: WorkedProxy) -> str:
         строку прокси
     :rtype: str
     """
-    return f"{proxy.status} {proxxy.url} {proxy.country}"
+    return f"{proxy.status} {proxy.url} {proxy.country}"
 
 
 def parse_proxies(proxies: str) -> list[str]:
