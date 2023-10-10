@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
 # Standarts
-import select
 import os
 import sys
+import itertools
 
 # Asyncio
 import asyncio
@@ -123,12 +123,13 @@ async def main():
         description="Скрипт, позволяющий проверить все переданные прокси"
     )
 
+
     # Название файла, откуда получаем прокси
     parser.add_argument(
         "proxies",
         type=str,
         help="Путь до файла со списком прокси, либо просто список прокси (разделенные переводом строки или пробелом)",
-        nargs="?"
+        nargs='?'
     )
 
     # Куда сохранять рабочие и
@@ -241,14 +242,10 @@ async def main():
     args = parser.parse_args()
 
     # Получаем возможный ввод из pipeline
-    getted_stdin = "" if not select.select(
-        [sys.stdin, ], [], [], 0.0
-    )[0] else sys.stdin.read()
+    args.proxies = args.proxies if sys.stdin.isatty() \
+        else ' '.join(sys.stdin.read().splitlines()).strip()
 
-    # Проверяем откуда был вывод
-    if not args.proxies and getted_stdin:
-        args.proxies = getted_stdin
-    elif not args.proxies:
+    if not args.proxies:
         parser.error("Argument 'proxies' is positional argument")
 
     # Получаем прокси из файла (если файл)
