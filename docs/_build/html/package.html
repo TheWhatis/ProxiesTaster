@@ -62,7 +62,7 @@
 <span class="n">taster</span><span class="o">.</span><span class="n">set_protocols</span><span class="p">([</span><span class="s1">&#39;socks4&#39;</span><span class="p">,</span> <span class="s1">&#39;socks5&#39;</span><span class="p">,</span> <span class="s1">&#39;https&#39;</span><span class="p">])</span>
 <span class="n">taster</span><span class="o">.</span><span class="n">set_workers</span><span class="p">(</span><span class="mi">300</span><span class="p">)</span>
 
-<span class="c1"># Также доступы установки</span>
+<span class="c1"># Также доступны установки</span>
 <span class="c1"># обработчиков на разные события</span>
 <span class="n">taster</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">Events</span><span class="o">.</span><span class="n">error</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">event</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="n">event</span><span class="p">))</span>
 <span class="n">taster</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">Events</span><span class="o">.</span><span class="n">check_error</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">event</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="n">event</span><span class="p">))</span>

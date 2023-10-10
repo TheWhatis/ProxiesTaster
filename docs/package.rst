@@ -34,7 +34,7 @@ Package
    taster.set_protocols(['socks4', 'socks5', 'https'])
    taster.set_workers(300)
 
-   # Также доступы установки
+   # Также доступны установки
    # обработчиков на разные события
    taster.on(Events.error, lambda event: print(event))
    taster.on(Events.check_error, lambda event: print(event))
