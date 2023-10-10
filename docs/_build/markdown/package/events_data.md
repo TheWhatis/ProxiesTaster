@@ -2,6 +2,8 @@
 
 ### *class* proxies_taster.events_data.End(name: str, result: Any)
 
+Базовые классы: [`Event`](#proxies_taster.events_data.Event)
+
 Скенет данных события окончания
 его работы
 
@@ -12,6 +14,8 @@
 #### result*: Any*
 
 ### *class* proxies_taster.events_data.Error(name: str, message: str, level: Literal['not work', 'error', 'critical'])
+
+Базовые классы: [`Event`](#proxies_taster.events_data.Event)
 
 Скелет данных события
 для ошибок
@@ -30,6 +34,8 @@
 
 ### *class* proxies_taster.events_data.Event(name: str)
 
+Базовые классы: `object`
+
 Скелет данных всех событий
 
 * **Параметры:**
@@ -39,6 +45,8 @@
 #### name*: str*
 
 ### *class* proxies_taster.events_data.Proxy(name: str, protocol: Literal['http', 'https', 'socks4', 'socks5'], proxy: str | [WorkedProxy](types.md#proxies_taster.types.WorkedProxy))
+
+Базовые классы: [`Event`](#proxies_taster.events_data.Event)
 
 Скелет данных любого события, которое
 будет непосредственно работать
@@ -55,6 +63,8 @@
 
 ### *class* proxies_taster.events_data.ProxyError(name: str, message: str, level: Literal['not work', 'error', 'critical'], protocol: Literal['http', 'https', 'socks4', 'socks5'] | False, proxy: str | [WorkedProxy](types.md#proxies_taster.types.WorkedProxy))
 
+Базовые классы: [`Proxy`](#proxies_taster.events_data.Proxy), [`Error`](#proxies_taster.events_data.Error)
+
 Скелет данных события ошибки при
 работе с прокси
 
@@ -67,11 +77,15 @@
 
 ### *class* proxies_taster.events_data.ProxySuccess(name: str, protocol: Literal['http', 'https', 'socks4', 'socks5'], proxy: str | [WorkedProxy](types.md#proxies_taster.types.WorkedProxy))
 
+Базовые классы: [`Proxy`](#proxies_taster.events_data.Proxy), [`Success`](#proxies_taster.events_data.Success)
+
 Скелет данных события, которое вызывается
 при успешной проверке или работе
 с прокси
 
 ### *class* proxies_taster.events_data.RunEnd(name: str, proxies: list[[WorkedProxy](types.md#proxies_taster.types.WorkedProxy)])
+
+Базовые классы: [`Event`](#proxies_taster.events_data.Event)
 
 Данные события окончания
 работы проверки прокси
@@ -82,6 +96,8 @@
 #### proxies*: list[[WorkedProxy](types.md#proxies_taster.types.WorkedProxy)]*
 
 ### *class* proxies_taster.events_data.RunStart(name: str, proxies: list[str | [ProxyDict](types.md#proxies_taster.types.ProxyDict)], workers: int)
+
+Базовые классы: [`Event`](#proxies_taster.events_data.Event)
 
 Данные события запуска проверки
 прокси
@@ -96,6 +112,8 @@
 #### workers*: int*
 
 ### *class* proxies_taster.events_data.Start(name: str, args: list, kwargs: dict)
+
+Базовые классы: [`Event`](#proxies_taster.events_data.Event)
 
 Скелет данных события, которое
 вызывается при начале работы
@@ -112,6 +130,8 @@
 #### kwargs*: dict*
 
 ### *class* proxies_taster.events_data.Success(name: str)
+
+Базовые классы: [`Event`](#proxies_taster.events_data.Event)
 
 Скелет данных события для
 завершенной задачи
