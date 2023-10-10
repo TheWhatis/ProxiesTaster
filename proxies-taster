@@ -1,9 +1,11 @@
 #!/usr/bin/env python
-
-# Standarts
+# Main
 import os
 import sys
-import json
+
+sys.path.append(os.path.abspath(os.sep) + f"usr{os.sep}lib{os.sep}")
+
+# Standarts
 import select
 
 # Asyncio
@@ -20,8 +22,7 @@ from proxies_taster import ProxiesTaster
 from proxies_taster import WorkedProxy
 
 # My logger
-from logger import setting_logging
-
+from proxies_parser_logger import setting_logging
 
 def country_filter(countries: list[str]):
     """
@@ -277,7 +278,7 @@ async def main():
     # Его настройки
     taster.set_workers(args.workers)
     taster.set_protocols(args.protocols)
-    
+
     # Установка обработчиков
     taster.on(
         'error', lambda event: event.message
