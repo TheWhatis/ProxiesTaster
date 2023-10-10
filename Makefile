@@ -31,4 +31,8 @@ install-dev:
 uninstall:
 	sudo rm "${LINKPATH}"
 	sudo rm "${DESTDIR}/${SCRIPT}"; \
-	sudo rm "${LIBDIR}/proxies_parser_logger.py"; \
+	sudo rm "${LIBDIR}/proxies_parser_logger.py"
+update:
+	make uninstall && make install
+update-dev: 
+	make uninstall && make install-dev
