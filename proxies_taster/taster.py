@@ -60,8 +60,8 @@ from .events_data import RunEnd
 
 def events_wrap(
         event: str,
-        protocol: int = 0,
-        proxy: int = 0,
+        protocol: int,
+        proxy: int,
 ):
     """
     Декоратор для методов ProxiesTaster
@@ -77,11 +77,11 @@ def events_wrap(
     :type event: str
 
     :param protocol: Индекс в *args аргумента,
-        под которым находится протокол прокси - default: 0
+        под которым находится протокол прокси
     :type protocol: int
 
     :param proxy: Индекс в *args аргумента,
-        под которым находится строка прокси - default: 0
+        под которым находится строка прокси
     :type proxy: int
 
     **Пример работы**

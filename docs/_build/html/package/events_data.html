@@ -14,7 +14,6 @@
     <script src="../_static/translations.js?v=29b1f277"></script>
     <link rel="index" title="Алфавитный указатель" href="../genindex.html" />
     <link rel="search" title="Поиск" href="../search.html" />
-    <link rel="next" title="App" href="../app.html" />
     <link rel="prev" title="Types" href="types.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
@@ -37,7 +36,8 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="proxies_taster.events_data.End">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">proxies_taster.events_data.</span></span><span class="sig-name descname"><span class="pre">End</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#proxies_taster.events_data.End" title="Link to this definition">¶</a></dt>
-<dd><p>Скенет данных события окончания
+<dd><p>Базовые классы: <a class="reference internal" href="#proxies_taster.events_data.Event" title="proxies_taster.events_data.Event"><code class="xref py py-class docutils literal notranslate"><span class="pre">Event</span></code></a></p>
+<p>Скенет данных события окончания
 его работы</p>
 <dl class="field-list simple">
 <dt class="field-odd">Параметры<span class="colon">:</span></dt>
@@ -55,7 +55,8 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="proxies_taster.events_data.Error">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">proxies_taster.events_data.</span></span><span class="sig-name descname"><span class="pre">Error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'not</span> <span class="pre">work'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'error'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'critical'</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#proxies_taster.events_data.Error" title="Link to this definition">¶</a></dt>
-<dd><p>Скелет данных события
+<dd><p>Базовые классы: <a class="reference internal" href="#proxies_taster.events_data.Event" title="proxies_taster.events_data.Event"><code class="xref py py-class docutils literal notranslate"><span class="pre">Event</span></code></a></p>
+<p>Скелет данных события
 для ошибок</p>
 <dl class="field-list simple">
 <dt class="field-odd">Параметры<span class="colon">:</span></dt>
@@ -84,7 +85,8 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="proxies_taster.events_data.Event">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">proxies_taster.events_data.</span></span><span class="sig-name descname"><span class="pre">Event</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#proxies_taster.events_data.Event" title="Link to this definition">¶</a></dt>
-<dd><p>Скелет данных всех событий</p>
+<dd><p>Базовые классы: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Скелет данных всех событий</p>
 <dl class="field-list simple">
 <dt class="field-odd">Параметры<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -103,7 +105,8 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="proxies_taster.events_data.Proxy">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">proxies_taster.events_data.</span></span><span class="sig-name descname"><span class="pre">Proxy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">protocol</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'http'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'https'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'socks4'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'socks5'</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proxy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="types.html#proxies_taster.types.WorkedProxy" title="proxies_taster.types.WorkedProxy"><span class="pre">WorkedProxy</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#proxies_taster.events_data.Proxy" title="Link to this definition">¶</a></dt>
-<dd><p>Скелет данных любого события, которое
+<dd><p>Базовые классы: <a class="reference internal" href="#proxies_taster.events_data.Event" title="proxies_taster.events_data.Event"><code class="xref py py-class docutils literal notranslate"><span class="pre">Event</span></code></a></p>
+<p>Скелет данных любого события, которое
 будет непосредственно работать
 с каким-либо прокси</p>
 <dl class="field-list simple">
@@ -130,7 +133,8 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="proxies_taster.events_data.ProxyError">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">proxies_taster.events_data.</span></span><span class="sig-name descname"><span class="pre">ProxyError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'not</span> <span class="pre">work'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'error'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'critical'</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">protocol</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'http'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'https'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'socks4'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'socks5'</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="k"><span class="pre">False</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proxy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="types.html#proxies_taster.types.WorkedProxy" title="proxies_taster.types.WorkedProxy"><span class="pre">WorkedProxy</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#proxies_taster.events_data.ProxyError" title="Link to this definition">¶</a></dt>
-<dd><p>Скелет данных события ошибки при
+<dd><p>Базовые классы: <a class="reference internal" href="#proxies_taster.events_data.Proxy" title="proxies_taster.events_data.Proxy"><code class="xref py py-class docutils literal notranslate"><span class="pre">Proxy</span></code></a>, <a class="reference internal" href="#proxies_taster.events_data.Error" title="proxies_taster.events_data.Error"><code class="xref py py-class docutils literal notranslate"><span class="pre">Error</span></code></a></p>
+<p>Скелет данных события ошибки при
 работе с прокси</p>
 <dl class="field-list simple">
 <dt class="field-odd">Параметры<span class="colon">:</span></dt>
@@ -149,7 +153,8 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="proxies_taster.events_data.ProxySuccess">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">proxies_taster.events_data.</span></span><span class="sig-name descname"><span class="pre">ProxySuccess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">protocol</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'http'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'https'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'socks4'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'socks5'</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proxy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="types.html#proxies_taster.types.WorkedProxy" title="proxies_taster.types.WorkedProxy"><span class="pre">WorkedProxy</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#proxies_taster.events_data.ProxySuccess" title="Link to this definition">¶</a></dt>
-<dd><p>Скелет данных события, которое вызывается
+<dd><p>Базовые классы: <a class="reference internal" href="#proxies_taster.events_data.Proxy" title="proxies_taster.events_data.Proxy"><code class="xref py py-class docutils literal notranslate"><span class="pre">Proxy</span></code></a>, <a class="reference internal" href="#proxies_taster.events_data.Success" title="proxies_taster.events_data.Success"><code class="xref py py-class docutils literal notranslate"><span class="pre">Success</span></code></a></p>
+<p>Скелет данных события, которое вызывается
 при успешной проверке или работе
 с прокси</p>
 </dd></dl>
@@ -157,7 +162,8 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="proxies_taster.events_data.RunEnd">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">proxies_taster.events_data.</span></span><span class="sig-name descname"><span class="pre">RunEnd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proxies</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="types.html#proxies_taster.types.WorkedProxy" title="proxies_taster.types.WorkedProxy"><span class="pre">WorkedProxy</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#proxies_taster.events_data.RunEnd" title="Link to this definition">¶</a></dt>
-<dd><p>Данные события окончания
+<dd><p>Базовые классы: <a class="reference internal" href="#proxies_taster.events_data.Event" title="proxies_taster.events_data.Event"><code class="xref py py-class docutils literal notranslate"><span class="pre">Event</span></code></a></p>
+<p>Данные события окончания
 работы проверки прокси</p>
 <dl class="field-list simple">
 <dt class="field-odd">Параметры<span class="colon">:</span></dt>
@@ -174,7 +180,8 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="proxies_taster.events_data.RunStart">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">proxies_taster.events_data.</span></span><span class="sig-name descname"><span class="pre">RunStart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proxies</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="types.html#proxies_taster.types.ProxyDict" title="proxies_taster.types.ProxyDict"><span class="pre">ProxyDict</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">workers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#proxies_taster.events_data.RunStart" title="Link to this definition">¶</a></dt>
-<dd><p>Данные события запуска проверки
+<dd><p>Базовые классы: <a class="reference internal" href="#proxies_taster.events_data.Event" title="proxies_taster.events_data.Event"><code class="xref py py-class docutils literal notranslate"><span class="pre">Event</span></code></a></p>
+<p>Данные события запуска проверки
 прокси</p>
 <dl class="field-list simple">
 <dt class="field-odd">Параметры<span class="colon">:</span></dt>
@@ -200,7 +207,8 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="proxies_taster.events_data.Start">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">proxies_taster.events_data.</span></span><span class="sig-name descname"><span class="pre">Start</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#proxies_taster.events_data.Start" title="Link to this definition">¶</a></dt>
-<dd><p>Скелет данных события, которое
+<dd><p>Базовые классы: <a class="reference internal" href="#proxies_taster.events_data.Event" title="proxies_taster.events_data.Event"><code class="xref py py-class docutils literal notranslate"><span class="pre">Event</span></code></a></p>
+<p>Скелет данных события, которое
 вызывается при начале работы
 какого-либо действия</p>
 <dl class="field-list simple">
@@ -228,7 +236,8 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="proxies_taster.events_data.Success">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">proxies_taster.events_data.</span></span><span class="sig-name descname"><span class="pre">Success</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#proxies_taster.events_data.Success" title="Link to this definition">¶</a></dt>
-<dd><p>Скелет данных события для
+<dd><p>Базовые классы: <a class="reference internal" href="#proxies_taster.events_data.Event" title="proxies_taster.events_data.Event"><code class="xref py py-class docutils literal notranslate"><span class="pre">Event</span></code></a></p>
+<p>Скелет данных события для
 завершенной задачи</p>
 </dd></dl>
 
@@ -253,13 +262,13 @@
 <h3>Навигация</h3>
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../app.html">App</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../package.html">Package</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="ProxiesTaster.html">ProxiesTaster</a></li>
 <li class="toctree-l2"><a class="reference internal" href="types.html">Types</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Events</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../app.html">App</a></li>
 </ul>
 
 <div class="relations">
@@ -268,7 +277,6 @@
   <li><a href="../index.html">Documentation overview</a><ul>
   <li><a href="../package.html">Package</a><ul>
       <li>Previous: <a href="types.html" title="предыдущая глава">Types</a></li>
-      <li>Next: <a href="../app.html" title="следующая глава">App</a></li>
   </ul></li>
   </ul></li>
 </ul>

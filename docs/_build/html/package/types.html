@@ -75,22 +75,16 @@
 
 </dd></dl>
 
-<dl class="py data">
-<dt class="sig sig-object py" id="proxies_taster.types.UrlProtocol">
-<span class="sig-prename descclassname"><span class="pre">proxies_taster.types.</span></span><span class="sig-name descname"><span class="pre">UrlProtocol</span></span><a class="headerlink" href="#proxies_taster.types.UrlProtocol" title="Link to this definition">¶</a></dt>
-<dd><p>Доступные протоколы HTTP</p>
-<p>alias of <code class="xref py py-obj docutils literal notranslate"><span class="pre">Literal</span></code>[„http“, „https“]</p>
-</dd></dl>
-
 <dl class="py class">
 <dt class="sig sig-object py" id="proxies_taster.types.WorkedProxy">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">proxies_taster.types.</span></span><span class="sig-name descname"><span class="pre">WorkedProxy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">protocol</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'http'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'https'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'socks4'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'socks5'</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proxy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">response</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ClientResponse</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">body</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">country</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="k"><span class="pre">False</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#proxies_taster.types.WorkedProxy" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">proxies_taster.types.</span></span><span class="sig-name descname"><span class="pre">WorkedProxy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">protocol</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'http'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'https'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'socks4'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'socks5'</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proxy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">response</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ClientResponse</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">body</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">country</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="k"><span class="pre">False</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#proxies_taster.types.WorkedProxy" title="Link to this definition">¶</a></dt>
 <dd><p>Базовые классы: <a class="reference internal" href="#proxies_taster.types.ProxyDict" title="proxies_taster.types.ProxyDict"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProxyDict</span></code></a></p>
 <p>Класс для прокси которые
 были проверены</p>
 <dl class="field-list simple">
 <dt class="field-odd">Параметры<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
+<li><p><strong>url</strong> (<em>str</em>) – Ссылка на прокси</p></li>
 <li><p><strong>response</strong> (<em>ClientResponse</em>) – Объект ответа от сервера</p></li>
 <li><p><strong>status</strong> (<em>int</em>) – Http код ответа</p></li>
 <li><p><strong>body</strong> (<em>Union</em><em>[</em><em>dict</em><em>, </em><em>str</em><em>]</em>) – Тело ответа</p></li>
@@ -118,6 +112,11 @@
 <span class="sig-name descname"><span class="pre">status</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#proxies_taster.types.WorkedProxy.status" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="py attribute">
+<dt class="sig sig-object py" id="proxies_taster.types.WorkedProxy.url">
+<span class="sig-name descname"><span class="pre">url</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#proxies_taster.types.WorkedProxy.url" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 </section>
@@ -141,13 +140,13 @@
 <h3>Навигация</h3>
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../app.html">App</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../package.html">Package</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="ProxiesTaster.html">ProxiesTaster</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Types</a></li>
 <li class="toctree-l2"><a class="reference internal" href="events_data.html">Events</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../app.html">App</a></li>
 </ul>
 
 <div class="relations">

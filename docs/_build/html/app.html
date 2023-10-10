@@ -42,8 +42,8 @@ asyncio</p>
 <p><strong>Установка</strong></p>
 <p>Для установки необходимо скопировать репозиторий
 на ваш компьютер <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">https://www.github.com/ThwWhatis/ProxiesTaster</span></code>,
-далее перейти в директорию, куда установлен скрипт и установить
-зависимости <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-r</span> <span class="pre">requirements.txt</span></code></p>
+далее перейти в директорию, куда установлен скрипт и запустить <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">install</span></code></p>
+<p>Для удаления достаточно запустить <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">uninstall</span></code></p>
 <p><strong>Список аргументов:</strong></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">proxies</span><span class="o">-</span><span class="n">taster</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">out</span> <span class="n">OUT</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">append</span> <span class="n">APPEND</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">workers</span> <span class="n">WORKERS</span><span class="p">]</span>
                        <span class="p">[</span><span class="o">--</span><span class="n">protocols</span> <span class="n">PROTOCOLS</span> <span class="p">[</span><span class="n">PROTOCOLS</span> <span class="o">...</span><span class="p">]]</span> <span class="p">[</span><span class="o">--</span><span class="n">countries</span> <span class="n">COUNTRIES</span> <span class="p">[</span><span class="n">COUNTRIES</span> <span class="o">...</span><span class="p">]]</span>
@@ -83,12 +83,6 @@ asyncio</p>
 </pre></div>
 </div>
 <p><strong>Пример использования</strong></p>
-<p>Для начана необходимо сделать скрипт
-исполняемым <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">chmod</span> <span class="pre">ugo+x</span> <span class="pre">proxies-taster</span></code>
-(если на linux)</p>
-<p>Далее вы можете создат alias для запуска
-скрипта из любого расположения <code class="docutils literal notranslate"><span class="pre">alias</span> <span class="pre">proxies-taster=/path/to/proxies-taster</span></code>
-(если на linux)</p>
 <p>С простой передачей прокси:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">proxies</span><span class="o">-</span><span class="n">taster</span> <span class="s1">&#39;72.195.34.59:4145 43.248.27.8:4646&#39;</span> <span class="o">--</span><span class="n">verbose</span> <span class="o">--</span><span class="n">out</span> <span class="n">valid</span><span class="o">.</span><span class="n">txt</span>
 <span class="n">proxies</span><span class="o">-</span><span class="n">taster</span> <span class="mf">72.195.34.59</span><span class="p">:</span><span class="mi">4145</span><span class="p">,</span><span class="mf">43.248.27.8</span><span class="p">:</span><span class="mi">4646</span> <span class="o">--</span><span class="n">verbose</span> <span class="o">--</span><span class="n">out</span> <span class="n">valid</span><span class="o">.</span><span class="n">txt</span>
