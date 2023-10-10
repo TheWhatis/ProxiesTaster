@@ -18,16 +18,11 @@ install:
 
 	sudo ln -s "${DESTDIR}/${SCRIPT}" "${LINKPATH}"
 install-dev:
-	sudo chmod ugo+x proxies-taster; \
-	pip install -r requirements.txt --break-system-packages \
+	python -m venv .; \
+	source bin/activate; \
+	pip install -r requirements.txt --break-system-packages; \
 
-	if [ ! -d "${LIBDIR}" ]; then \
-	    sudo mkdir -p "${LIBDIR}"; \
-	fi; \
-	sudo cp proxies_parser_logger.py "${LIBDIR/proxies_parser_logger.py}"; \
-	sudo cp proxies-taster "${DESTDIR}/${SCRIPT}"; \
-
-	sudo ln -s "${DESTDIR}/${SCRIPT}" "${LINKPATH}"
+	sudo chmod ugo+x proxies-taster
 uninstall:
 	pip uninstall proxies-taster -y --break-system-packages
 
@@ -36,5 +31,10 @@ uninstall:
 	sudo rm "${LIBDIR}/proxies_parser_logger.py"
 update:
 	make uninstall && make install
-update-dev: 
+update-dev:
 	make uninstall && make install-dev
+build:
+	make install-dev; \
+
+	python setup.py sdist; \
+	make clean -C docs/ && make markdown -C docs/ && make html -C docs/
