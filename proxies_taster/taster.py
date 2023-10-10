@@ -458,12 +458,14 @@ class ProxiesTaster:
                         pass
                     finally:
                         worked = WorkedProxy(
-                            protocol,
-                            proxy,
-                            response,
-                            response.status,
-                            body,
-                            body['country'] if "country" in body else False
+                            url=f"{protocol}/{proxy}",
+                            protocol=protocol,
+                            proxy=proxy,
+                            response=response,
+                            status=response.status,
+                            body=body,
+                            country=body['country'] if "country" in body
+                            else False
                         )
                         self.emitter.emit(
                             'except.success', ProxySuccess(

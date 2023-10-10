@@ -47,6 +47,7 @@ class WorkedProxy(ProxyDict):
     :param country: Страна прокси
     :type country: Union[str, False]
     """
+    url: str
     response: ClientResponse
     status: int
     body: Union[dict, str]
