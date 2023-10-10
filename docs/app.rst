@@ -58,14 +58,6 @@ asyncio
 
 **Пример использования**
 
-Для начана необходимо сделать скрипт
-исполняемым ``sudo chmod ugo+x proxies-taster``
-(если на linux)
-
-Далее вы можете создат alias для запуска
-скрипта из любого расположения ``alias proxies-taster=/path/to/proxies-taster``
-(если на linux)
-
 С простой передачей прокси:
 
 .. parsed-literal::
