@@ -1,12 +1,13 @@
 """Скрипт для установлки пакета"""
-from setuptools import setup
+from setuptools import setup, find_packages
 
 
 name = 'proxies-taster'
 version = '1.0.0'
 
-long_description = '''Пакет который позволяет быстро проверить,
-                   распределить и отсортировать переданные прокси.'''
+# Long description
+with open('README.md', 'r') as readme:
+    long_description = readme.read()
 
 url = 'https://github.com/TheWhatis/ProxiesTaster'
 
@@ -24,10 +25,13 @@ if __name__ == '__main__':
         long_description=long_description,
         long_description_content_type='text/markdown',
 
+        license='GPL',
+        platforms='any',
+
         url=url,
         download_url=f"{url}/dist/{name}-{version}.zip",
 
-        packages=['proxies_taster'],
+        packages=['proxies_taster', 'docs/_build/markdown'],
         install_requires=[
             'aiohttp',
             'aiohttp-proxy',
