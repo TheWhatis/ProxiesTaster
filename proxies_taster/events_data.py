@@ -23,6 +23,7 @@ class Event:
     """
     name: str
 
+
 @dataclass
 class Start(Event):
     """
@@ -41,6 +42,7 @@ class Start(Event):
     args: list
     kwargs: dict
 
+
 @dataclass
 class Success(Event):
     """
@@ -48,6 +50,7 @@ class Success(Event):
     завершенной задачи
     """
     pass
+
 
 @dataclass
 class Error(Event):
@@ -68,6 +71,7 @@ class Error(Event):
     message: str
     level: Literal['not work', 'error', 'critical']
 
+
 @dataclass
 class End(Event):
     """
@@ -79,6 +83,7 @@ class End(Event):
     :type result: Any
     """
     result: Any
+
 
 @dataclass
 class Proxy(Event):
@@ -97,6 +102,7 @@ class Proxy(Event):
     protocol: Protocol
     proxy: Union[str, WorkedProxy]
 
+
 @dataclass
 class ProxyError(Proxy, Error):
     """
@@ -109,6 +115,7 @@ class ProxyError(Proxy, Error):
     :type protocol: Union[Protocol, False]
     """
     protocol: Union[Protocol, False]
+
 
 @dataclass
 class ProxySuccess(Proxy, Success):
@@ -135,6 +142,7 @@ class RunStart(Event):
     """
     proxies: Proxies
     workers: int
+
 
 @dataclass
 class RunEnd(Event):

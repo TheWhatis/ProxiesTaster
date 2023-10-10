@@ -4,7 +4,6 @@ import logging
 
 from os import path
 from sys import exc_info, stdout
-from io import TextIOWrapper
 
 from datetime import datetime
 from pathlib import Path

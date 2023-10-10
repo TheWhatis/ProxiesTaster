@@ -12,9 +12,6 @@ from dataclasses import dataclass
 Protocol: type = Literal['http', 'https', 'socks4', 'socks5']
 """Доступные протоколы для Прокси"""
 
-UrlProtocol: type = Literal['http', 'https']
-"""Доступные протоколы HTTP"""
-
 
 @dataclass
 class ProxyDict:
@@ -56,6 +53,6 @@ class WorkedProxy(ProxyDict):
     country: Union[str, False]
 
 
-Proxies: type = list[ Union[str, ProxyDict] ]
+Proxies: type = list[Union[str, ProxyDict]]
 """Тип данных обозначающий в каком формате
 передавать прокси для их проверки и обработки"""

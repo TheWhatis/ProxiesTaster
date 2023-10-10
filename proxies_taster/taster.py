@@ -41,11 +41,9 @@ from aiohttp_proxy.errors import SocksError
 
 # Types
 from .types import Protocol
-from .types import UrlProtocol
 from .types import Proxies
 
 # Dataclasses
-from .types import ProxyDict
 from .types import WorkedProxy
 
 # Events
@@ -104,9 +102,9 @@ def events_wrap(
             name = event + '.start'
             args[0].emitter.emit(
                 name, Start(
-                    name = name,
-                    args = args,
-                    kwargs = kwargs
+                    name=name,
+                    args=args,
+                    kwargs=kwargs
                 )
             )
 
@@ -117,29 +115,29 @@ def events_wrap(
                 name = event + '.success'
                 args[0].emitter.emit(
                     name, ProxySuccess(
-                        name = name,
-                        protocol = result.protocol,
-                        proxy = result
+                        name=name,
+                        protocol=result.protocol,
+                        proxy=result
                     )
                 )
             else:
                 name = event + '.error'
                 error = ProxyError(
-                    name = name,
-                    protocol = args[protocol] if len(args) - 1 >= protocol
+                    name=name,
+                    protocol=args[protocol] if len(args) - 1 >= protocol
                     else kwargs['protocol'] if 'protocol' in kwargs
                     else False,
-                    proxy = args[proxy] or kwargs['proxy'],
-                    level = 'not work',
-                    message = None
+                    proxy=args[proxy] or kwargs['proxy'],
+                    level='not work',
+                    message=None
                 )
                 args[0].emitter.emit('error', error)
                 args[0].emitter.emit(name, error)
 
             args[0].emitter.emit(
                 end_name, End(
-                    name = end_name,
-                    result = result
+                    name=end_name,
+                    result=result
                 )
             )
 
@@ -248,7 +246,7 @@ class ProxiesTaster:
         :rtype: None
 
         **Пример работы**
-        
+
         .. code-block:: python
 
             taster.set_workers(300)
@@ -269,13 +267,12 @@ class ProxiesTaster:
         :rtype: None
 
         **Пример работы**
-        
+
         .. code-block:: python
 
             taster.set_protocols(['socks4', 'socks5'])
         """
         self.protocols = protocols
-
 
     def on(
             self,
@@ -308,7 +305,6 @@ class ProxiesTaster:
             taster.on('check.start', print_data)
         """
         self.emitter.on(event, listener)
-
 
     @events_wrap('except', 1, 2)
     async def exc(
@@ -356,11 +352,11 @@ class ProxiesTaster:
                 port = splitted_proxy[1].split(":")[1]
         except Exception:
             error = ProxyError(
-                name = 'except.error',
-                protocol = protocol,
-                proxy = proxy,
-                level = 'error',
-                message = f"Invalid format proxy '{proxy}'"
+                name='except.error',
+                protocol=protocol,
+                proxy=proxy,
+                level='error',
+                message=f"Invalid format proxy '{proxy}'"
             )
             self.emitter.emit('error', error)
             self.emitter.emit('except.error', error)
@@ -372,11 +368,11 @@ class ProxiesTaster:
             port = int(port)
         except Exception:
             error = ProxyError(
-                name = 'except.error',
-                protocol = protocol,
-                proxy = proxy,
-                level = 'error',
-                message = ' '.join(
+                name='except.error',
+                protocol=protocol,
+                proxy=proxy,
+                level='error',
+                message=' '.join(
                     [
                         'Error converted proxy port from string to',
                         f"integer value. Port: '{port}'"
@@ -390,11 +386,11 @@ class ProxiesTaster:
         # Если порт не входит в диапазон поддерживаемых
         if port >= 65535:
             error = ProxyError(
-                name = 'except.error',
-                protocol = protocol,
-                proxy = proxy,
-                level = 'error',
-                message = f"Port value '{port}' must be in range 0-65535"
+                name='except.error',
+                protocol=protocol,
+                proxy=proxy,
+                level='error',
+                message=f"Port value '{port}' must be in range 0-65535"
             )
             self.emitter.emit('error', error)
             self.emitter.emit('except.error', error)
@@ -430,7 +426,7 @@ class ProxiesTaster:
                         }
                     }
                 )
-            except ProxiesTaster.errors as e:
+            except ProxiesTaster.errors:
                 pass
             except AttributeError as error:
                 # Выделяем определенную ошибку, которая возникает
@@ -438,11 +434,11 @@ class ProxiesTaster:
                 # блокируем вывод исключеыния для него
                 if str(error) == "'NoneType' object has no attribute 'get_extra_info'":
                     error = ProxyError(
-                        name = 'except.error',
-                        protocol = protocol,
-                        proxy = proxy,
-                        level = 'error',
-                        message = str(error)
+                        name='except.error',
+                        protocol=protocol,
+                        proxy=proxy,
+                        level='error',
+                        message=str(error)
                     )
                     self.emitter.emit('error', error)
                     self.emitter.emit('except.error', error)
@@ -471,14 +467,13 @@ class ProxiesTaster:
                         )
                         self.emitter.emit(
                             'except.success', ProxySuccess(
-                                name = 'except.success',
-                                protocol = protocol,
-                                proxy = worked,
+                                name='except.success',
+                                protocol=protocol,
+                                proxy=worked,
                             )
                         )
                         return worked
         return False
-
 
     @events_wrap('check', 2, 1)
     async def check(
@@ -551,7 +546,6 @@ class ProxiesTaster:
             # Если прокси не работает
             return False
 
-
     async def run(self) -> list[WorkedProxy]:
         """
         Запускает весь процесс проверки
@@ -568,9 +562,9 @@ class ProxiesTaster:
         """
         self.emitter.emit(
             'run.start', RunStart(
-                name = 'run.start',
-                proxies = self.proxies,
-                workers = self.workers
+                name='run.start',
+                proxies=self.proxies,
+                workers=self.workers
             )
         )
         # Фильтруем и получаем
@@ -584,8 +578,8 @@ class ProxiesTaster:
         )
         self.emitter.emit(
             'run.end', RunEnd(
-                name = 'run.end',
-                proxies = result
+                name='run.end',
+                proxies=result
             )
         )
         return result
