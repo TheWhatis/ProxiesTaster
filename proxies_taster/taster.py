@@ -458,7 +458,7 @@ class ProxiesTaster:
                         pass
                     finally:
                         worked = WorkedProxy(
-                            url=f"{protocol}/{proxy}",
+                            url=f"{protocol}://{proxy}",
                             protocol=protocol,
                             proxy=proxy,
                             response=response,
