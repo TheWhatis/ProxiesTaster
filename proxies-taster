@@ -3,7 +3,6 @@
 # Standarts
 import os
 import sys
-import itertools
 
 # Asyncio
 import asyncio
