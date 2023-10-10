@@ -29,6 +29,8 @@ install-dev:
 
 	sudo ln -s "${DESTDIR}/${SCRIPT}" "${LINKPATH}"
 uninstall:
+	pip uninstall proxies-taster -y --break-system-packages
+
 	sudo rm "${LINKPATH}"
 	sudo rm "${DESTDIR}/${SCRIPT}"; \
 	sudo rm "${LIBDIR}/proxies_parser_logger.py"
