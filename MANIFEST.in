@@ -1,0 +1,4 @@
+include README.md requirements.txt
+recursive-exclude docs *
+recursive-include docs/_build/markdown *
+exclude .gitignore proxies-taster logger.py Makefile requirements.txt

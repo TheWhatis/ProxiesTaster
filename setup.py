@@ -1,5 +1,5 @@
 """Скрипт для установлки пакета"""
-from setuptools import setup, find_packages
+from setuptools import setup
 
 
 name = 'proxies-taster'
@@ -31,7 +31,8 @@ if __name__ == '__main__':
         url=url,
         download_url=f"{url}/dist/{name}-{version}.zip",
 
-        packages=['proxies_taster', 'docs/_build/markdown'],
+        packages=['proxies_taster'],
+        include_package_data=True,
         install_requires=[
             'aiohttp',
             'aiohttp-proxy',
