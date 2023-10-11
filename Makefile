@@ -7,28 +7,41 @@ LIBDIR = ${DESTDIR}
 LINKPATH = /usr/local/bin/${SCRIPT}
 
 install:
-	sudo chmod ugo+x proxies-taster; \
-	pip install proxies-taster logging colorama --break-system-packages; \
-
-	if [ ! -d "${LIBDIR}" ]; then \
-	    sudo mkdir -p "${LIBDIR}"; \
-	fi; \
-	sudo cp proxies_parser_logger.py "${LIBDIR}/proxies_parser_logger.py"; \
-	sudo cp proxies-taster "${DESTDIR}/${SCRIPT}"; \
-
-	sudo ln -s "${DESTDIR}/${SCRIPT}" "${LINKPATH}"
+	@if [ -f "${LINKPATH}" ]; then \
+	    echo 'ProxiesTaster already installed'; \
+	else \
+	    if ! [ `stat -c %a "${SCRIPT}"` -eq 755 ]; then \
+		sudo chmod ugo+x "${SCRIPT}"; \
+	    else \
+		echo "${SCRIPT} script already has all execute permission"; \
+	    fi; \
+	    pip install proxies-taster logging colorama --break-system-packages; \
+	    if [ ! -d "${LIBDIR}" ]; then \
+		sudo mkdir -p "${LIBDIR}"; \
+	    fi; \
+	    sudo cp proxies_parser_logger.py "${LIBDIR}/proxies_parser_logger.py"; \
+	    sudo cp proxies-taster "${DESTDIR}/${SCRIPT}"; \
+	    sudo ln -s "${DESTDIR}/${SCRIPT}" "${LINKPATH}"; \
+	fi;
 install-dev:
-	python -m venv .; \
+	@python -m venv .; \
 	source bin/activate; \
 	pip install -r requirements.txt --break-system-packages; \
 
-	sudo chmod ugo+x proxies-taster
+	@if ! [ `stat -c %a "${SCRIPT}"` -eq 755 ]; then \
+	    sudo chmod ugo+x "${SCRIPT}"; \
+	else \
+	    echo "${SCRIPT} script already has all execute permission"; \
+	fi;
 uninstall:
-	pip uninstall proxies-taster -y --break-system-packages
-
-	sudo rm "${LINKPATH}"
-	sudo rm "${DESTDIR}/${SCRIPT}"; \
-	sudo rm "${LIBDIR}/proxies_parser_logger.py"
+	@if [ ! -f "${LINKPATH}" ]; then \
+	    echo 'ProxiesTaster already dont installed'; \
+	else \
+	    pip uninstall proxies-taster -y --break-system-packages; \
+	    sudo rm -f "${LINKPATH}"; \
+	    sudo rm -f "${DESTDIR}/${SCRIPT}"; \
+	    sudo rm -f "${LIBDIR}/proxies_parser_logger.py"; \
+	fi;
 update:
 	make uninstall && make install
 update-dev:
@@ -36,5 +49,5 @@ update-dev:
 build:
 	make install-dev; \
 
-	python setup.py sdist; \
+	@python setup.py sdist; \
 	make clean -C docs/ && make markdown -C docs/ && make html -C docs/
