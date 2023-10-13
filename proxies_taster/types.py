@@ -16,8 +16,8 @@ class Protocol(Enum):
     """
     Доступные протоколы прокси
 
-    :param HTTPS: HTTP прокси
-    :type HTTPS: str
+    :param HTTP: HTTP прокси
+    :type HTTP: str
 
     :param HTTPS: HTTPS прокси
     :type HTTPS: str
