@@ -2,15 +2,36 @@
 from typing import Union
 from typing import Literal
 
-# ClientResponse
-from aiohttp.client_reqrep import ClientResponse
+# Enum
+from enum import Enum
 
 # Dataclass
 from dataclasses import dataclass
 
+# ClientResponse
+from aiohttp.client_reqrep import ClientResponse
 
-Protocol: type = Literal['http', 'https', 'socks4', 'socks5']
-"""Доступные протоколы для Прокси"""
+
+class Protocol(Enum):
+    """
+    Доступные протоколы прокси
+
+    :param HTTPS: HTTP прокси
+    :type HTTPS: str
+
+    :param HTTPS: HTTPS прокси
+    :type HTTPS: str
+
+    :param SOCKS4: SOCKS4 прокси
+    :type SOCKS4: str
+
+    :param SOCKS5: SOCKS5 прокси
+    :type SOCKS5: str
+    """
+    HTTP   = 'http'
+    HTTPS  = 'https'
+    SOCKS4 = 'socks4'
+    SOCKS5 = 'socks5'
 
 
 @dataclass

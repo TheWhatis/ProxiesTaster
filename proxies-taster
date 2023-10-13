@@ -14,8 +14,9 @@ import argparse
 from colorama import init
 
 # ProxiesTaster
-from proxies_taster import ProxiesTaster
+from proxies_taster import Protocol
 from proxies_taster import WorkedProxy
+from proxies_taster import ProxiesTaster
 from proxies_taster.events_data import Events
 
 # My logger
@@ -165,13 +166,8 @@ async def main():
         "-p",
         nargs='+',
         type=str,
-        help="Фильтр по протоколам прокси (socks4, socks4 и т.д.)",
-        default=[
-            'socks5',
-            'socks4',
-            'https',
-            'http'
-        ]
+        help="Фильтр по протоколам прокси (socks4, socks5 и т.д.)",
+        default=[protocol.value for protocol in Protocol]
     )
 
     # По какой стране фильтровать
@@ -273,7 +269,12 @@ async def main():
 
     # Его настройки
     taster.set_workers(args.workers)
-    taster.set_protocols(args.protocols)
+    taster.set_protocols(
+        [
+            Protocol(protocol)
+            for protocol in args.protocols
+        ]
+    )
 
     # Установка обработчиков
     taster.on(

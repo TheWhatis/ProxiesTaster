@@ -38,19 +38,27 @@
 <p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">proxies-taster</span></code></p>
 <p><strong>Использование</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Подключаем модуль</span>
-<span class="kn">from</span> <span class="nn">proxies_taster</span> <span class="kn">import</span> <span class="n">ProxiesTaster</span>
+<span class="kn">from</span> <span class="nn">proxies_taster</span> <span class="kn">import</span> <span class="n">Protocol</span>
 <span class="kn">from</span> <span class="nn">proxies_taster</span> <span class="kn">import</span> <span class="n">ProxyDict</span>
+<span class="kn">from</span> <span class="nn">proxies_taster</span> <span class="kn">import</span> <span class="n">ProxiesTaster</span>
 <span class="kn">from</span> <span class="nn">proxies_taster.events_data</span> <span class="kn">import</span> <span class="n">Events</span>
 
 <span class="c1"># Список прокси</span>
 <span class="n">proxies</span> <span class="o">=</span> <span class="p">[</span>
+     <span class="c1"># Простая передачи списка прокси</span>
      <span class="s1">&#39;184.178.172.28:15294&#39;</span><span class="p">,</span>
      <span class="s1">&#39;142.54.226.214:4145&#39;</span><span class="p">,</span>
      <span class="s1">&#39;174.77.111.196:4145&#39;</span><span class="p">,</span>
      <span class="s1">&#39;72.195.114.169:4145&#39;</span><span class="p">,</span>
-     <span class="s1">&#39;184.95.235.194:1080&#39;</span><span class="p">,</span>
+
+     <span class="c1"># Установить проверяемый прокси</span>
+     <span class="c1"># прямо в строке с самим прокси</span>
+     <span class="s1">&#39;socks5://184.95.235.194:1080&#39;</span><span class="p">,</span>
+
+     <span class="c1"># Или за счет использования объекта</span>
+     <span class="c1"># proxies_taster.ProxyDict</span>
      <span class="n">ProxyDict</span><span class="p">(</span>
-         <span class="n">protocol</span> <span class="o">=</span> <span class="s1">&#39;socks4&#39;</span><span class="p">,</span>
+         <span class="n">protocol</span> <span class="o">=</span> <span class="n">Protocol</span><span class="o">.</span><span class="n">SOCKS4</span><span class="p">,</span>
          <span class="n">proxy</span> <span class="o">=</span> <span class="s1">&#39;125.141.139.112:5566&#39;</span>
      <span class="p">)</span>
 <span class="p">]</span>
@@ -58,9 +66,15 @@
 <span class="c1"># Иницилизируем класс</span>
 <span class="n">taster</span> <span class="o">=</span> <span class="n">ProxiesTaster</span><span class="p">(</span><span class="n">proxies</span><span class="p">)</span>
 
-<span class="c1"># Устанавливаем настройки</span>
-<span class="n">taster</span><span class="o">.</span><span class="n">set_protocols</span><span class="p">([</span><span class="s1">&#39;socks4&#39;</span><span class="p">,</span> <span class="s1">&#39;socks5&#39;</span><span class="p">,</span> <span class="s1">&#39;https&#39;</span><span class="p">])</span>
+<span class="c1"># Установка настроек</span>
 <span class="n">taster</span><span class="o">.</span><span class="n">set_workers</span><span class="p">(</span><span class="mi">300</span><span class="p">)</span>
+<span class="n">taster</span><span class="o">.</span><span class="n">set_protocols</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="n">Protocol</span><span class="o">.</span><span class="n">SOCKS4</span><span class="p">,</span>
+        <span class="n">Protocol</span><span class="o">.</span><span class="n">SOCKS5</span><span class="p">,</span>
+        <span class="n">Protocol</span><span class="o">.</span><span class="n">HTTP</span>
+    <span class="p">]</span>
+<span class="p">)</span>
 
 <span class="c1"># Также доступны установки</span>
 <span class="c1"># обработчиков на разные события</span>
@@ -73,8 +87,8 @@
     <span class="p">)</span>
 <span class="p">)</span>
 
-<span class="c1"># Запускаем проверку и</span>
-<span class="c1"># получаем результат</span>
+<span class="c1"># Запускаем проверку</span>
+<span class="c1"># и получаем результат</span>
 <span class="n">proxies</span> <span class="o">=</span> <span class="k">await</span> <span class="n">taster</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 </pre></div>
 </div>

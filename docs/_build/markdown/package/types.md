@@ -1,10 +1,24 @@
 # Types
 
-### proxies_taster.types.Protocol
+### *class* proxies_taster.types.Protocol(value, names=None, \*, module=None, qualname=None, type=None, start=1, boundary=None)
 
-Доступные протоколы для Прокси
+Базовые классы: `Enum`
 
-alias of `Literal`[„http“, „https“, „socks4“, „socks5“]
+Доступные протоколы прокси
+
+* **Параметры:**
+  * **HTTPS** (*str*) – HTTP прокси
+  * **HTTPS** – HTTPS прокси
+  * **SOCKS4** (*str*) – SOCKS4 прокси
+  * **SOCKS5** (*str*) – SOCKS5 прокси
+
+#### HTTP *= 'http'*
+
+#### HTTPS *= 'https'*
+
+#### SOCKS4 *= 'socks4'*
+
+#### SOCKS5 *= 'socks5'*
 
 ### proxies_taster.types.Proxies
 
@@ -13,7 +27,7 @@ alias of `Literal`[„http“, „https“, „socks4“, „socks5“]
 
 alias of `list`[`Union`[`str`, [`ProxyDict`](#proxies_taster.types.ProxyDict)]]
 
-### *class* proxies_taster.types.ProxyDict(protocol: Literal['http', 'https', 'socks4', 'socks5'], proxy: str)
+### *class* proxies_taster.types.ProxyDict(protocol: [Protocol](#proxies_taster.types.Protocol), proxy: str)
 
 Базовые классы: `object`
 
@@ -21,14 +35,14 @@ alias of `list`[`Union`[`str`, [`ProxyDict`](#proxies_taster.types.ProxyDict)]]
 передается вместе с протоклом
 
 * **Параметры:**
-  * **protocol** (*Protocol*) – Протокол, по которому подключаться
+  * **protocol** ([*Protocol*](#proxies_taster.types.Protocol)) – Протокол, по которому подключаться
   * **proxy** (*str*) – Сам прокси ip:port
 
-#### protocol*: Literal['http', 'https', 'socks4', 'socks5']*
+#### protocol*: [Protocol](#proxies_taster.types.Protocol)*
 
 #### proxy*: str*
 
-### *class* proxies_taster.types.WorkedProxy(protocol: Literal['http', 'https', 'socks4', 'socks5'], proxy: str, url: str, response: ClientResponse, status: int, body: dict | str, country: str | False)
+### *class* proxies_taster.types.WorkedProxy(protocol: [Protocol](#proxies_taster.types.Protocol), proxy: str, url: str, response: ClientResponse, status: int, body: dict | str, country: str | False)
 
 Базовые классы: [`ProxyDict`](#proxies_taster.types.ProxyDict)
 

@@ -12,12 +12,14 @@
 прокси:
 
 ```python
+from proxies_taster import Protocol
+
 taster = ProxiesTaster(
     [
         '194.163.132.76:41212',
-        '91.121.52.213:55348',
+        'socks5://91.121.52.213:55348',
         ProxyDict(
-            'socks4',
+            Protocol.SOCKS4,
             '172.104.136.161:39104'
         )
     ]
@@ -30,8 +32,12 @@ taster = ProxiesTaster(
 запросов, определяемые протоколы:
 
 ```python
-taster.set_workers(200)
-taster.set_protocols(['socks4', 'socks5'])
+from proxies_taster import Protocol
+
+taster.set_workers(2000)
+taster.set_protocols(
+    [Protocol.SOCKS4, Protocol.SOCKS5]
+)
 ```
 
 * **Параметры:**
@@ -39,7 +45,7 @@ taster.set_protocols(['socks4', 'socks5'])
   при неправильной работе прокси (список
   пропускаемых ошибок)
 
-#### *async* check(proxy: str, protocol: Literal['http', 'https', 'socks4', 'socks5'] | False = False)
+#### *async* check(proxy: str, protocol: [Protocol](types.md#proxies_taster.types.Protocol) | False = False)
 
 Проверяет прокси на роботоспособность
 и определяет его сетевой протокол
@@ -51,7 +57,7 @@ taster.set_protocols(['socks4', 'socks5'])
 
 * **Параметры:**
   * **proxy** (*str*) – Сам прокси ip:port
-  * **protocol** (*Union**[**Protocol**,* *False**]*) – Протокол по которому проверять прокси
+  * **protocol** (*Union**[*[*Protocol*](types.md#proxies_taster.types.Protocol)*,* *False**]*) – Протокол по которому проверять прокси
 * **Результат:**
   Если успешно - выдает протокол, прокси
   и расположение (результат ответа от ipinfo.io)
@@ -61,21 +67,31 @@ taster.set_protocols(['socks4', 'socks5'])
 **Пример работы**
 
 ```python
+from proxies_taster import Protocol
+
+# Обычной передачей прокси
 result = await taster.check('107.174.66.231:36626')
-# Или
-result = await taster.check('107.174.66.231:36626', 'https')
+
+# Или с указанием определенного протокола
+result = await taster.check(
+    '107.174.66.231:36626', Protocol.HTTP
+)
+
+# Или также можно указать протокол
+# в самой строке прокси
+result = await taster.check('socks4://107.174.66.231:36626')
 ```
 
 #### errors *= (<class 'aiohttp_proxy.errors.InvalidServerReply'>, <class 'aiohttp.client_exceptions.ClientConnectorError'>, <class 'aiohttp_proxy.errors.InvalidServerVersion'>, <class 'aiohttp.client_exceptions.ServerDisconnectedError'>, <class 'TimeoutError'>, <class 'TimeoutError'>, <class 'ConnectionResetError'>, <class 'aiohttp_proxy.errors.SocksConnectionError'>, <class 'aiohttp.client_exceptions.ClientHttpProxyError'>, <class 'aiohttp.client_exceptions.ClientOSError'>, <class 'aiohttp.client_exceptions.ClientResponseError'>, <class 'aiohttp.client_exceptions.ClientPayloadError'>, <class 'aiohttp_proxy.errors.NoAcceptableAuthMethods'>, <class 'aiohttp_proxy.errors.SocksError'>, <class 'aiohttp.client_exceptions.InvalidURL'>)*
 
-#### *async* exc(protocol: Literal['http', 'https', 'socks4', 'socks5'], proxy: str)
+#### *async* exc(protocol: [Protocol](types.md#proxies_taster.types.Protocol), proxy: str)
 
 Делает запрос через aiohttp
 и, с помощью exceptions, определяет
 что прокси рабочий или нет
 
 * **Параметры:**
-  * **protocol** (*Protocol*) – Протокол, по которому обращаться к прокси
+  * **protocol** ([*Protocol*](types.md#proxies_taster.types.Protocol)) – Протокол, по которому обращаться к прокси
   * **proxy** (*str*) – Сам прокси
 * **Результат:**
   Возвращает либо
@@ -86,7 +102,11 @@ result = await taster.check('107.174.66.231:36626', 'https')
 **Пример проверки прокси**
 
 ```python
-result = await taster.exc('socks4', '107.174.66.231:36626')
+from proxies_taster import Protocol
+
+result = await taster.exc(
+    Protocol.SOCKS4, '107.174.66.231:36626'
+)
 ```
 
 #### on(event: [Events](events_data.md#proxies_taster.events_data.Events), listener: Callable[[[Event](events_data.md#proxies_taster.events_data.Event)], Any])
@@ -136,14 +156,15 @@ taster.on(Events.check, print_data)
 result = await taster.run()
 ```
 
-#### set_protocols(protocols: list[Literal['http', 'https', 'socks4', 'socks5']])
+#### set_protocols(protocols: [Protocol](types.md#proxies_taster.types.Protocol) | list[[Protocol](types.md#proxies_taster.types.Protocol)])
 
 Установить определяемые
 протоколы (что-то вроде фильтра)
 
 * **Параметры:**
-  **protocols** (*list**[**Protocol**]*) – Список определяемых протоколов:
-  http, https, socks4, socks5
+  **protocols** (*Union**[**list**[*[*Protocol*](types.md#proxies_taster.types.Protocol)*]**]*) – Список определяемых протоколов:
+  Protocol.HTTP, Protocol.HTTPS,
+  Protocol.SOCKS4, Protocol.SOCKS5
 * **Результат:**
   Ничего не возвращает
 * **Тип результата:**
@@ -152,7 +173,11 @@ result = await taster.run()
 **Пример работы**
 
 ```python
-taster.set_protocols(['socks4', 'socks5'])
+from proxies_taster import Protocol
+
+taster.set_protocols(
+    [Protocol.SOCKS4, Protocol.SOCKS5]
+)
 ```
 
 #### set_workers(workers: int)

@@ -88,7 +88,7 @@
 
 #### except_success*: str* *= 'except.success'*
 
-### *class* proxies_taster.events_data.Proxy(name: str, protocol: Literal['http', 'https', 'socks4', 'socks5'], proxy: str | [WorkedProxy](types.md#proxies_taster.types.WorkedProxy))
+### *class* proxies_taster.events_data.Proxy(name: str, protocol: [Protocol](types.md#proxies_taster.types.Protocol), proxy: str | [WorkedProxy](types.md#proxies_taster.types.WorkedProxy))
 
 Базовые классы: [`Event`](#proxies_taster.events_data.Event)
 
@@ -97,15 +97,15 @@
 с каким-либо прокси
 
 * **Параметры:**
-  * **protocol** (*Protocol*) – Протокол прокси: HTTP, SOCKS4 и т.д.
+  * **protocol** ([*Protocol*](types.md#proxies_taster.types.Protocol)) – Протокол прокси: HTTP, SOCKS4 и т.д.
   * **proxy** (*str*) – Сама строка прокси или
     уже рабочий прокси
 
-#### protocol*: Literal['http', 'https', 'socks4', 'socks5']*
+#### protocol*: [Protocol](types.md#proxies_taster.types.Protocol)*
 
 #### proxy*: str | [WorkedProxy](types.md#proxies_taster.types.WorkedProxy)*
 
-### *class* proxies_taster.events_data.ProxyError(name: str, message: str, level: Literal['not work', 'error', 'critical'], protocol: Literal['http', 'https', 'socks4', 'socks5'] | False, proxy: str | [WorkedProxy](types.md#proxies_taster.types.WorkedProxy))
+### *class* proxies_taster.events_data.ProxyError(name: str, message: str, level: Literal['not work', 'error', 'critical'], protocol: [Protocol](types.md#proxies_taster.types.Protocol) | False, proxy: str | [WorkedProxy](types.md#proxies_taster.types.WorkedProxy))
 
 Базовые классы: [`Proxy`](#proxies_taster.events_data.Proxy), [`Error`](#proxies_taster.events_data.Error)
 
@@ -113,13 +113,13 @@
 работе с прокси
 
 * **Параметры:**
-  **protocol** (*Union**[**Protocol**,* *False**]*) – В зависимости, был ли
+  **protocol** (*Union**[*[*Protocol*](types.md#proxies_taster.types.Protocol)*,* *False**]*) – В зависимости, был ли
   передан протокол при проверке или нет,
   может быть False или название протокола
 
-#### protocol*: Literal['http', 'https', 'socks4', 'socks5'] | False*
+#### protocol*: [Protocol](types.md#proxies_taster.types.Protocol) | False*
 
-### *class* proxies_taster.events_data.ProxySuccess(name: str, protocol: Literal['http', 'https', 'socks4', 'socks5'], proxy: str | [WorkedProxy](types.md#proxies_taster.types.WorkedProxy))
+### *class* proxies_taster.events_data.ProxySuccess(name: str, protocol: [Protocol](types.md#proxies_taster.types.Protocol), proxy: str | [WorkedProxy](types.md#proxies_taster.types.WorkedProxy))
 
 Базовые классы: [`Proxy`](#proxies_taster.events_data.Proxy), [`Success`](#proxies_taster.events_data.Success)
 

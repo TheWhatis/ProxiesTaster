@@ -164,12 +164,14 @@ class ProxiesTaster:
 
     .. code-block:: python
 
+        from proxies_taster import Protocol
+
         taster = ProxiesTaster(
             [
                 '194.163.132.76:41212',
-                '91.121.52.213:55348',
+                'socks5://91.121.52.213:55348',
                 ProxyDict(
-                    'socks4',
+                    Protocol.SOCKS4,
                     '172.104.136.161:39104'
                 )
             ]
@@ -182,8 +184,12 @@ class ProxiesTaster:
 
     .. code-block:: python
 
-        taster.set_workers(200)
-        taster.set_protocols(['socks4', 'socks5'])
+        from proxies_taster import Protocol
+
+        taster.set_workers(2000)
+        taster.set_protocols(
+            [Protocol.SOCKS4, Protocol.SOCKS5]
+        )
 
     :param errors: Список ошибок, которые возникают
         при неправильной работе прокси (список
@@ -225,12 +231,7 @@ class ProxiesTaster:
         self.semaphore = asyncio.Semaphore(self.workers)
 
         # Провряемые протоколы
-        self.protocols: list[Protocol] = [
-            'http',
-            'https',
-            'socks4',
-            'socks5'
-        ]
+        self.protocols: list[Protocol] = [protocol for protocol in Protocol]
 
         # Events
         self.emitter = EventEmitter()
@@ -255,14 +256,17 @@ class ProxiesTaster:
         self.workers = workers if workers > 0 else 1
         self.semaphore = asyncio.Semaphore(self.workers)
 
-    def set_protocols(self, protocols: list[Protocol]):
+    def set_protocols(
+            self, protocols: Union[Protocol, list[Protocol]]
+    ):
         """
         Установить определяемые
         протоколы (что-то вроде фильтра)
 
         :param protocols: Список определяемых протоколов:
-            http, https, socks4, socks5
-        :type protocols: list[Protocol]
+            Protocol.HTTP, Protocol.HTTPS,
+            Protocol.SOCKS4, Protocol.SOCKS5
+        :type protocols: Union[list[Protocol]]
 
         :return: Ничего не возвращает
         :rtype: None
@@ -271,9 +275,15 @@ class ProxiesTaster:
 
         .. code-block:: python
 
-            taster.set_protocols(['socks4', 'socks5'])
+            from proxies_taster import Protocol
+
+            taster.set_protocols(
+                [Protocol.SOCKS4, Protocol.SOCKS5]
+            )
         """
-        self.protocols = protocols
+        self.protocols = protocols if isinstance(
+            protocols, list
+        ) else [protocols]
 
     def on(
             self,
@@ -338,8 +348,15 @@ class ProxiesTaster:
 
         .. code-block:: python
 
-            result = await taster.exc('socks4', '107.174.66.231:36626')
+            from proxies_taster import Protocol
+
+            result = await taster.exc(
+                Protocol.SOCKS4, '107.174.66.231:36626'
+            )
         """
+        # Обрабатываем переданный прокси
+        proxy = next(iter(proxy.split('://')), 1) or proxy
+
         # Заголовки
         headers = {
             "User-Agent": UserAgent().random,
@@ -407,9 +424,9 @@ class ProxiesTaster:
         async with aiohttp.ClientSession(
                 # В зависимости от протокола, разные способ
                 # использования прокси
-                **{} if protocol == 'http' else {
+                **{} if protocol == Protocol.HTTP else {
                     "connector": ProxyConnector.from_url(
-                        f"{protocol}://{proxy}"
+                        f"{protocol.value}://{proxy}"
                     )
                 }
         ) as session:
@@ -421,15 +438,16 @@ class ProxiesTaster:
                 }
 
                 # Получаем ответ от сервера
-                url = 'https' if 'socks' in protocol else protocol
+                url = protocol.value
+                url = 'https' if 'socks' in url else url
                 url = f"{url}://ipinfo.io/json"
                 response = await session.get(
                     *[url],
                     # В зависимости от протокола, разные способ
                     # использования прокси
-                    **kwargs if protocol != 'http' else {
+                    **kwargs if protocol != Protocol.HTTP else {
                         **kwargs, **{
-                            "proxy": f"{protocol}://{proxy}"
+                            "proxy": f"{protocol.value}://{proxy}"
                         }
                     }
                 )
@@ -465,7 +483,7 @@ class ProxiesTaster:
                         pass
                     finally:
                         worked = WorkedProxy(
-                            url=f"{protocol}://{proxy}",
+                            url=f"{protocol.value}://{proxy}",
                             protocol=protocol,
                             proxy=proxy,
                             response=response,
@@ -513,42 +531,34 @@ class ProxiesTaster:
 
         .. code-block:: python
 
+            from proxies_taster import Protocol
+
+            # Обычной передачей прокси
             result = await taster.check('107.174.66.231:36626')
-            # Или
-            result = await taster.check('107.174.66.231:36626', 'https')
+
+            # Или с указанием определенного протокола
+            result = await taster.check(
+                '107.174.66.231:36626', Protocol.HTTP
+            )
+
+            # Или также можно указать протокол
+            # в самой строке прокси
+            result = await taster.check('socks4://107.174.66.231:36626')
         """
         async with self.semaphore:
-            if not protocol:
-                # Protocol in string
-                if (protocol := proxy.split('://'))[0] in [
-                        'socks5',
-                        'socks4',
-                        'http',
-                        'https'
-                ]:
-                    if protocol[0] in self.protocols:
-                        return await self.exc(protocol[0], proxy)
+            # Если был передан протокол
+            if protocol and protocol in self.protocols:
+                return await self.exc(protocol, proxy)
 
-                # SOCKS5
-                if 'socks5' in self.protocols:
-                    if result := await self.exc('socks5', proxy):
-                        return result
+            # Если протокол был передан в строке
+            if (protocol := proxy.split('://'))[0] in [
+                protocol.value for
+                protocol in self.protocols
+            ]:
+                return await self.exc(Protocol(protocol), proxy)
 
-                # SOCKS4
-                if 'socks4' in self.protocols:
-                    if result := await self.exc('socks4', proxy):
-                        return result
-
-                # HTTPS
-                if 'https' in self.protocols:
-                    if result := await self.exc('https', proxy):
-                        return result
-
-                # HTTP
-                if 'http' in self.protocols:
-                    if result := await self.exc('http', proxy):
-                        return result
-            elif protocol in self.protocols:
+            # Перебираем доступные прокси
+            for protocol in self.protocols:
                 if result := await self.exc(protocol, proxy):
                     return result
 
