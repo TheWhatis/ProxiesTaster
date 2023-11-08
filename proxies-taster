@@ -121,7 +121,6 @@ def check_end(tbar) -> callable:
     :rtype: callable
     """
     def wrapper(event):
-        tbar.ncols = os.get_terminal_size().columns
         tbar.update(1)
 
     return wrapper
@@ -312,7 +311,7 @@ async def main():
         ]
     )
 
-    tbar = tqdm(total=len(proxies))
+    tbar = tqdm(total=len(proxies), dynamic_ncols=True)
     taster.on(
         Events.check_end, check_end(tbar)
     )
