@@ -298,6 +298,7 @@ async def main():
     # Установка обработчиков
     taster.on(
         Events.error, lambda event: event.message
+        and not event.level == 'skipped'
         and DLOGGER.error(event.message)
     )
     taster.on(
