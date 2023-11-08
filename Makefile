@@ -15,7 +15,7 @@ install:
 	    else \
 		echo "${SCRIPT} script already has all execute permission"; \
 	    fi; \
-	    pip install proxies-taster logging colorama --break-system-packages; \
+	    pip install proxies-taster colorama --break-system-packages; \
 	    if [ ! -d "${LIBDIR}" ]; then \
 		sudo mkdir -p "${LIBDIR}"; \
 	    fi; \

@@ -13,6 +13,9 @@ import argparse
 # Colorama
 from colorama import init
 
+# Tqdm
+from tqdm import tqdm
+
 # ProxiesTaster
 from proxies_taster import Protocol
 from proxies_taster import WorkedProxy
@@ -105,6 +108,23 @@ def parse_proxies(proxies: str) -> list[str]:
             )
         )
     )
+
+
+def check_end(tbar) -> callable:
+    """
+    Обработчик для окончания проверки
+    одного отдельного прокси - Events.check_end
+
+    :param tbar: Иницилизированный tqdm
+
+    :param returns: Возвращает функцию wrapper
+    :rtype: callable
+    """
+    def wrapper(event):
+        tbar.ncols = os.get_terminal_size().columns
+        tbar.update(1)
+
+    return wrapper
 
 
 async def main():
@@ -292,6 +312,11 @@ async def main():
         ]
     )
 
+    tbar = tqdm(total=len(proxies))
+    taster.on(
+        Events.check_end, check_end(tbar)
+    )
+
     # Получаем прокси, фильтруем их
     # и преобразуем в строки
     results = list(
@@ -324,7 +349,9 @@ async def main():
                 valid_proxy.write("\n" + proxy)
 
     for proxy in results:
-        print(proxy)
+        tqdm.write(proxy)
+
+    tbar.close()
 
 
 if __name__ == "__main__":

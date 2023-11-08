@@ -5,6 +5,7 @@ import logging
 from os import path
 from sys import exc_info, stdout
 
+from tqdm import tqdm
 from datetime import datetime
 from pathlib import Path
 
@@ -40,6 +41,16 @@ class ColorFormatter(logging.Formatter):
 
         # Возвращаем значение
         return logging.Formatter.format(self, record)
+
+
+class ProgressConsoleHandler(logging.StreamHandler):
+    """
+    A handler class which allows the cursor to stay on
+    one line for selected messages
+    """
+    def emit(self, record):
+        msg = self.format(record)
+        tqdm.write(msg)
 
 
 def setting_logging(
@@ -127,7 +138,7 @@ def setting_logging(
     file_handler.setLevel(logging.NOTSET)
 
     # В терминале
-    stdout_handler = logging.StreamHandler(stdout)
+    stdout_handler = ProgressConsoleHandler(stdout)
     stdout_handler.setFormatter(ColorFormatter(config["format"]))
 
     DLOGGER.setLevel(logging.DEBUG)
