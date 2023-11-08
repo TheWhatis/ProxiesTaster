@@ -123,7 +123,7 @@ def events_wrap(
                 )
             else:
                 name = event + '.error'
-                error = ProxyError(
+                error = ProxyError.create(
                     name=name,
                     protocol=args[protocol] if len(args) - 1 >= protocol
                     else kwargs['protocol'] if 'protocol' in kwargs
@@ -375,7 +375,7 @@ class ProxiesTaster:
             elif len_splitted_proxy == 2:
                 port = splitted_proxy[1].split(":")[1]
         except Exception:
-            error = ProxyError(
+            error = ProxyError.create(
                 name='except.error',
                 protocol=protocol,
                 proxy=proxy,
@@ -391,7 +391,7 @@ class ProxiesTaster:
         try:
             port = int(port)
         except Exception:
-            error = ProxyError(
+            error = ProxyError.create(
                 name='except.error',
                 protocol=protocol,
                 proxy=proxy,
@@ -409,7 +409,7 @@ class ProxiesTaster:
 
         # Если порт не входит в диапазон поддерживаемых
         if port >= 65535:
-            error = ProxyError(
+            error = ProxyError.create(
                 name='except.error',
                 protocol=protocol,
                 proxy=proxy,
@@ -452,12 +452,13 @@ class ProxiesTaster:
                     }
                 )
             except ProxiesTaster.errors as err:
-                error = ProxyError(
+                error = ProxyError.create(
                     name='except.error.skipped',
                     protocol=protocol,
                     proxy=proxy,
                     level='skipped',
-                    message=str(err)
+                    message=str(err),
+                    exception=err
                 );
                 self.emitter.emit('error', error)
                 self.emitter.emit('except.error', error)
@@ -467,7 +468,7 @@ class ProxiesTaster:
                 # при неправильной работе прокси (AttributeError) и
                 # блокируем вывод исключеыния для него
                 if str(err) == "'NoneType' object has no attribute 'get_extra_info'":
-                    error = ProxyError(
+                    error = ProxyError.create(
                         name='except.error',
                         protocol=protocol,
                         proxy=proxy,

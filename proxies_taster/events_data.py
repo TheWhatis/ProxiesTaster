@@ -4,7 +4,7 @@ from typing import Union
 from typing import Literal
 
 # Dataclass
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, InitVar
 
 # Enum
 from enum import Enum
@@ -134,8 +134,11 @@ class Error(Event):
     """
     message: str
     level: Literal['not work', 'error', 'critical', 'skipped']
-    exception: any = field(default=False, init=False)
+    exception: any
 
+    @classmethod
+    def create(cls, exception=False, **kwargs):
+        return cls(exception=exception, **kwargs)
 
 @dataclass
 class End(Event):
