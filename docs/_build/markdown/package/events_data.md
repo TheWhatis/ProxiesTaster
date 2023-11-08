@@ -13,7 +13,7 @@
 
 #### result*: Any*
 
-### *class* proxies_taster.events_data.Error(name: str, message: str, level: Literal['not work', 'error', 'critical', 'skipped'])
+### *class* proxies_taster.events_data.Error(name: str, message: str, level: Literal['not work', 'error', 'critical', 'skipped'], exception: any)
 
 Базовые классы: [`Event`](#proxies_taster.events_data.Event)
 
@@ -31,7 +31,9 @@
     на работоспособность или не работоспособность прокси.
     Это промежутночные ошибки, возникающие при работе проверки
 
-#### exception*: any* *= False*
+#### *classmethod* create(exception=False, \*\*kwargs)
+
+#### exception*: any*
 
 #### level*: Literal['not work', 'error', 'critical', 'skipped']*
 
@@ -114,7 +116,7 @@
 
 #### proxy*: str | [WorkedProxy](types.md#proxies_taster.types.WorkedProxy)*
 
-### *class* proxies_taster.events_data.ProxyError(name: str, message: str, level: Literal['not work', 'error', 'critical', 'skipped'], protocol: [Protocol](types.md#proxies_taster.types.Protocol) | False, proxy: str | [WorkedProxy](types.md#proxies_taster.types.WorkedProxy))
+### *class* proxies_taster.events_data.ProxyError(name: str, message: str, level: Literal['not work', 'error', 'critical', 'skipped'], exception: any, protocol: [Protocol](types.md#proxies_taster.types.Protocol) | False, proxy: str | [WorkedProxy](types.md#proxies_taster.types.WorkedProxy))
 
 Базовые классы: [`Proxy`](#proxies_taster.events_data.Proxy), [`Error`](#proxies_taster.events_data.Error)
 
