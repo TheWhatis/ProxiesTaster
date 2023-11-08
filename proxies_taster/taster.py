@@ -451,26 +451,36 @@ class ProxiesTaster:
                         }
                     }
                 )
-            except ProxiesTaster.errors:
-                pass
-            except AttributeError as error:
+            except ProxiesTaster.errors as err:
+                error = ProxyError(
+                    name='except.error.skipped',
+                    protocol=protocol,
+                    proxy=proxy,
+                    level='skipped',
+                    message=str(error)
+                );
+                self.emitter.emit('error', error)
+                self.emitter.emit('except.error', error)
+                self.emitter.emit('except.error.skipped', error)
+            except AttributeError as err:
                 # Выделяем определенную ошибку, которая возникает
                 # при неправильной работе прокси (AttributeError) и
                 # блокируем вывод исключеыния для него
-                if str(error) == "'NoneType' object has no attribute 'get_extra_info'":
+                if str(err) == "'NoneType' object has no attribute 'get_extra_info'":
                     error = ProxyError(
                         name='except.error',
                         protocol=protocol,
                         proxy=proxy,
                         level='error',
-                        message=str(error)
+                        message=str(error),
+                        exception=err
                     )
                     self.emitter.emit('error', error)
                     self.emitter.emit('except.error', error)
                     return False
 
                 # Иначе просто выводим исключыение
-                raise error
+                raise err
             else:
                 try:
                     body = await response.text()

@@ -4,7 +4,7 @@ from typing import Union
 from typing import Literal
 
 # Dataclass
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 # Enum
 from enum import Enum
@@ -41,6 +41,10 @@ class Events(Enum):
         работе метода `taster.exc`
     :type except_error: str
 
+    :param except_error_skipped: Пропущенная ошибка при
+        работе метода `taster.exc`
+    :type except_error_skipped: str
+
     :param check: Начало работы метода `taster.check`
     :type check: str
 
@@ -61,11 +65,11 @@ class Events(Enum):
     except_end: str     = 'except.end'
     except_success: str = 'except.success'
     except_error: str   = 'except.error'
+    except_error_skipped = 'except.error.skipped'
     check: str          = 'check.start'
     check_end: str      = 'check.end'
     check_success: str  = 'check.success'
     check_error: str    = 'check.error'
-
 
 @dataclass
 class Event:
@@ -122,11 +126,15 @@ class Error(Event):
         то это уровень "не работы прокси", если 'error',
         то скорее всего это ошибка передачи параметров, либо
         не сильно критические непредвиденные ошибки, а 'critical'
-        уже является ошибкой, которая не совместима с работой скрипта
-    :type level: Literal['default', 'error', 'critical']
+        уже является ошибкой, которая не совместима с работой
+        скрипта. В тоже время 'skipped' - это ошибки, не влияющие
+        на работоспособность или не работоспособность прокси.
+        Это промежутночные ошибки, возникающие при работе проверки
+    :type level: Literal['default', 'error', 'critical', 'skipped']
     """
     message: str
-    level: Literal['not work', 'error', 'critical']
+    level: Literal['not work', 'error', 'critical', 'skipped']
+    exception: any = field(default=False, init=False)
 
 
 @dataclass
@@ -156,7 +164,7 @@ class Proxy(Event):
         уже рабочий прокси
     :type proxy: str
     """
-    protocol: Protocol
+    protocol: Union[Protocol, False]
     proxy: Union[str, WorkedProxy]
 
 
@@ -165,13 +173,7 @@ class ProxyError(Proxy, Error):
     """
     Скелет данных события ошибки при
     работе с прокси
-
-    :param protocol: В зависимости, был ли
-        передан протокол при проверке или нет,
-        может быть False или название протокола
-    :type protocol: Union[Protocol, False]
     """
-    protocol: Union[Protocol, False]
 
 
 @dataclass
