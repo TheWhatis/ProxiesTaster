@@ -13,7 +13,7 @@
 
 #### result*: Any*
 
-### *class* proxies_taster.events_data.Error(name: str, message: str, level: Literal['not work', 'error', 'critical'])
+### *class* proxies_taster.events_data.Error(name: str, message: str, level: Literal['not work', 'error', 'critical', 'skipped'])
 
 Базовые классы: [`Event`](#proxies_taster.events_data.Event)
 
@@ -22,13 +22,18 @@
 
 * **Параметры:**
   * **message** (*str*) – Сообщение ошибки
-  * **level** (*Literal**[**'default'**,* *'error'**,* *'critical'**]*) – Уровень ошибки: если „not work“,
+  * **level** (*Literal**[**'default'**,* *'error'**,* *'critical'**,* *'skipped'**]*) – Уровень ошибки: если „not work“,
     то это уровень «не работы прокси», если „error“,
     то скорее всего это ошибка передачи параметров, либо
     не сильно критические непредвиденные ошибки, а „critical“
-    уже является ошибкой, которая не совместима с работой скрипта
+    уже является ошибкой, которая не совместима с работой
+    скрипта. В тоже время „skipped“ - это ошибки, не влияющие
+    на работоспособность или не работоспособность прокси.
+    Это промежутночные ошибки, возникающие при работе проверки
 
-#### level*: Literal['not work', 'error', 'critical']*
+#### exception*: any* *= False*
+
+#### level*: Literal['not work', 'error', 'critical', 'skipped']*
 
 #### message*: str*
 
@@ -62,6 +67,8 @@
     был получен)
   * **except_error** (*str*) – Какая-либо ошибка при
     работе метода taster.exc
+  * **except_error_skipped** (*str*) – Пропущенная ошибка при
+    работе метода taster.exc
   * **check** (*str*) – Начало работы метода taster.check
   * **check_end** (*str*) – Конец работы метода taster.check
   * **check_success** – Успешное завершение
@@ -86,9 +93,11 @@
 
 #### except_error*: str* *= 'except.error'*
 
+#### except_error_skipped *= 'except.error.skipped'*
+
 #### except_success*: str* *= 'except.success'*
 
-### *class* proxies_taster.events_data.Proxy(name: str, protocol: [Protocol](types.md#proxies_taster.types.Protocol), proxy: str | [WorkedProxy](types.md#proxies_taster.types.WorkedProxy))
+### *class* proxies_taster.events_data.Proxy(name: str, protocol: [Protocol](types.md#proxies_taster.types.Protocol) | False, proxy: str | [WorkedProxy](types.md#proxies_taster.types.WorkedProxy))
 
 Базовые классы: [`Event`](#proxies_taster.events_data.Event)
 
@@ -101,25 +110,18 @@
   * **proxy** (*str*) – Сама строка прокси или
     уже рабочий прокси
 
-#### protocol*: [Protocol](types.md#proxies_taster.types.Protocol)*
+#### protocol*: [Protocol](types.md#proxies_taster.types.Protocol) | False*
 
 #### proxy*: str | [WorkedProxy](types.md#proxies_taster.types.WorkedProxy)*
 
-### *class* proxies_taster.events_data.ProxyError(name: str, message: str, level: Literal['not work', 'error', 'critical'], protocol: [Protocol](types.md#proxies_taster.types.Protocol) | False, proxy: str | [WorkedProxy](types.md#proxies_taster.types.WorkedProxy))
+### *class* proxies_taster.events_data.ProxyError(name: str, message: str, level: Literal['not work', 'error', 'critical', 'skipped'], protocol: [Protocol](types.md#proxies_taster.types.Protocol) | False, proxy: str | [WorkedProxy](types.md#proxies_taster.types.WorkedProxy))
 
 Базовые классы: [`Proxy`](#proxies_taster.events_data.Proxy), [`Error`](#proxies_taster.events_data.Error)
 
 Скелет данных события ошибки при
 работе с прокси
 
-* **Параметры:**
-  **protocol** (*Union**[*[*Protocol*](types.md#proxies_taster.types.Protocol)*,* *False**]*) – В зависимости, был ли
-  передан протокол при проверке или нет,
-  может быть False или название протокола
-
-#### protocol*: [Protocol](types.md#proxies_taster.types.Protocol) | False*
-
-### *class* proxies_taster.events_data.ProxySuccess(name: str, protocol: [Protocol](types.md#proxies_taster.types.Protocol), proxy: str | [WorkedProxy](types.md#proxies_taster.types.WorkedProxy))
+### *class* proxies_taster.events_data.ProxySuccess(name: str, protocol: [Protocol](types.md#proxies_taster.types.Protocol) | False, proxy: str | [WorkedProxy](types.md#proxies_taster.types.WorkedProxy))
 
 Базовые классы: [`Proxy`](#proxies_taster.events_data.Proxy), [`Success`](#proxies_taster.events_data.Success)
 
