@@ -457,7 +457,7 @@ class ProxiesTaster:
                     protocol=protocol,
                     proxy=proxy,
                     level='skipped',
-                    message=str(error)
+                    message=str(err)
                 );
                 self.emitter.emit('error', error)
                 self.emitter.emit('except.error', error)
@@ -472,7 +472,7 @@ class ProxiesTaster:
                         protocol=protocol,
                         proxy=proxy,
                         level='error',
-                        message=str(error),
+                        message=str(err),
                         exception=err
                     )
                     self.emitter.emit('error', error)
