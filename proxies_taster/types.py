@@ -16,22 +16,22 @@ class Protocol(Enum):
     """
     Доступные протоколы прокси
 
-    :param HTTP: HTTP прокси
-    :type HTTP: str
-
-    :param HTTPS: HTTPS прокси
-    :type HTTPS: str
+    :param SOCKS5: SOCKS5 прокси
+    :type SOCKS5: str
 
     :param SOCKS4: SOCKS4 прокси
     :type SOCKS4: str
 
-    :param SOCKS5: SOCKS5 прокси
-    :type SOCKS5: str
+    :param HTTPS: HTTPS прокси
+    :type HTTPS: str
+
+    :param HTTP: HTTP прокси
+    :type HTTP: str
     """
-    HTTP   = 'http'
-    HTTPS  = 'https'
-    SOCKS4 = 'socks4'
     SOCKS5 = 'socks5'
+    SOCKS4 = 'socks4'
+    HTTPS  = 'https'
+    HTTP   = 'http'
 
 
 @dataclass
