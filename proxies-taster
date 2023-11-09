@@ -3,9 +3,13 @@
 # Standarts
 import os
 import sys
+import time
 
 # Asyncio
 import asyncio
+
+# Aiohttp
+from aiohttp.client_exceptions import ClientProxyConnectionError
 
 # args
 import argparse
@@ -21,9 +25,15 @@ from proxies_taster import Protocol
 from proxies_taster import WorkedProxy
 from proxies_taster import ProxiesTaster
 from proxies_taster.events_data import Events
+from proxies_taster.exceptions import TooManyOpenFilesError
 
 # My logger
 from proxies_parser_logger import setting_logging
+
+
+args = []
+bars: dict = {}
+worked_proxies: list = []
 
 
 def country_filter(countries: list[str]):
@@ -110,34 +120,13 @@ def parse_proxies(proxies: str) -> list[str]:
     )
 
 
-def check_end(tbar) -> callable:
+def init_parser():
     """
-    Обработчик для окончания проверки
-    одного отдельного прокси - Events.check_end
+    Иницилизация парсера
 
-    :param tbar: Иницилизированный tqdm
-
-    :param returns: Возвращает функцию wrapper
-    :rtype: callable
+    :return: Возвращает иницилизированный парсер
     """
-    def wrapper(event):
-        tbar.update(1)
-
-    return wrapper
-
-
-async def main():
-    """
-    Основная функция;
-
-    Запускается, если
-    программа была запущена
-    через терминал (а не как модуль)
-    """
-    # Иницилизация colorama
-    init()
-
-    # Основные аргументы
+        # Основные аргументы
     # Парсим входные аргументы
     parser = argparse.ArgumentParser(
         description="Скрипт, позволяющий проверить все переданные прокси"
@@ -253,6 +242,133 @@ async def main():
         default=False
     )
 
+    return parser
+
+
+def query_yes_no(question: str, default: str|None = "yes") -> bool:
+    """
+    Ask a yes/no question via raw_input()
+    and return their answer.
+
+    :param question" is a string that is presented to the user.
+    :type question: str
+
+    :param default: is the presumed answer if the
+        user just hits <Enter>. It must be "yes"
+        (the default), "no" or None (meaning
+        an answer is required of the user).
+    :type default: str|None
+
+    :return: The "answer" return value is True
+        for "yes" or False for "no".
+    :rtype: bool
+    """
+    valid = {
+        "yes": True,
+        "y": True,
+        "ye": True,
+        "да": True,
+        "д": True,
+        "no": False,
+        "n": False,
+        "нет": False,
+        "не": False,
+        "н": False
+    }
+    if default is None:
+        prompt = " [y/n] "
+    elif default == "yes":
+        prompt = " [Y/n] "
+    elif default == "no":
+        prompt = " [y/N] "
+    else:
+        raise ValueError("invalid default answer: '%s'" % default)
+
+    while True:
+        try:
+            choice = input(question + prompt)
+        except EOFError:
+            sys.stdin = open(
+                'CONIN$' if sys.platform == 'win32'
+                else os.ttyname(sys.stdout.fileno()), 'r'
+            )
+
+            try:
+                choice = input('\r' + question + prompt)
+            except EOFError:
+                return False
+
+        if default is not None and choice == "":
+            return valid[default]
+        elif choice in valid:
+            return valid[choice]
+        else:
+            print("Please response yes/no/y/n")
+
+
+def save_proxies(
+        args,
+        worked_proxies: list,
+        interrupt: bool = False
+) -> list[str]:
+    """
+    Получить обработанные прокси
+
+    :return: Обработанные строки прокси
+    :rtype: list[str]
+    """
+    proxies = list(
+        map(
+            string_cast, filter(
+                status_codes_filter(args.status_codes), filter(
+                    country_filter(args.countries), worked_proxies
+                )
+            )
+        )
+    );
+
+    # Выводим список полученных прокси
+    for proxy in proxies:
+        print(proxy)
+
+    # Сохраняем в файл
+    if args.out:
+        if not interrupt or query_yes_no(
+            f"Save proxies into file {args.out}?"
+        ):
+            with open(args.out, "w", encoding="utf-8") as out:
+                out.write("\n".join(proxies))
+
+    # Добавляем в файл
+    if args.append:
+        if not interrupt or query_yes_no(
+            f"Append passed proxies into file {args.append}?"
+        ):
+            with open(args.append, "a", encoding="UTF-8") as append:
+                for proxy in proxies:
+                    append.write("\n" + proxy)
+
+
+async def main():
+    """
+    Основная функция;
+
+    Запускается, если
+    программа была запущена
+    через терминал (а не как модуль)
+    """
+    # Получение глобальной переменной
+    # со списком прокси
+    global args
+    global bars
+    global worked_proxies
+
+    # Иницилизация colorama
+    init()
+
+    # Иницилизация парсера
+    parser = init_parser()
+
     # Получаем аргументы
     args = parser.parse_args()
 
@@ -282,7 +398,21 @@ async def main():
         logkwargs["format"] = args.logformat
 
     FLOGGER, DLOGGER = setting_logging(args.logconfig, **logkwargs)
+    DLOGGER.debug(f"Parsed args: {args}")
 
+    bars = {
+        'success': tqdm(
+            dynamic_ncols=True,
+            desc='Success'
+        ),
+        'process': tqdm(
+            total=len(proxies),
+            dynamic_ncols=True,
+            desc='Process'
+        ),
+    }
+
+    DLOGGER.info('Initialization taster')
     # Объект проверяльщика прокси
     taster = ProxiesTaster(proxies)
 
@@ -309,50 +439,55 @@ async def main():
         Events.check_success, lambda event: [
             DLOGGER.info(f"Proxy work {event.proxy.proxy}"),
             DLOGGER.debug(f"Work proxy data {event.proxy}"),
+            worked_proxies.append(event.proxy),
+            bars['success'].update()
         ]
     )
 
-    tbar = tqdm(total=len(proxies), dynamic_ncols=True)
     taster.on(
-        Events.check_end, check_end(tbar)
+        Events.error, lambda event: event.message
+        and isinstance(event.exception, ClientProxyConnectionError)
+        and 'Too many open files' in event.message
+        and DLOGGER.critical(
+            f"{type(event.exception)} - {event.message}"
+        )
+    )
+
+    taster.on(
+        Events.check_end, lambda event: bars['process'].update()
     )
 
     # Получаем прокси, фильтруем их
     # и преобразуем в строки
-    results = list(
-        map(
-            string_cast, filter(
-                status_codes_filter(args.status_codes), filter(
-                    country_filter(args.countries),
-                    await taster.run()
-                )
-            )
+    try:
+        await taster.run()
+    except TooManyOpenFilesError:
+        for bar in bars.values():
+            bar.close()
+        parser.error(
+            '\nThere are not enough file descriptors ' \
+            + '(too many open files). The number of file ' \
+            + 'descriptors should be slightly larger than ' \
+            + 'the quantity of "Workers"; ' \
+            + f"installed workers: {args.workers}"
         )
-    )
 
-    # Сохраняем в файл
-    if args.out:
-        if args.verbose:
-            DLOGGER.info(f"Write result in '{args.out}'")
-        with open(args.out, "w", encoding="uTF-8") as valid_proxy:
-            valid_proxy.write("\n".join(results))
-
-    # Добавляем в файл
-    if args.append:
-        if args.verbose:
-            DLOGGER.info(
-                f"Append to file end result; Filename is '{args.append}'"
-            )
-
-        with open(args.append, "a", encoding="UTF-8") as valid_proxy:
-            for proxy in results:
-                valid_proxy.write("\n" + proxy)
-
-    for proxy in results:
-        tqdm.write(proxy)
-
-    tbar.close()
+    for bar in bars.values():
+        bar.close()
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    try:
+        asyncio.run(main())
+    except KeyboardInterrupt:
+        for bar in bars.values():
+            bar.close()
+
+        if args and worked_proxies:
+            try:
+                save_proxies(args, worked_proxies, True)
+            except KeyboardInterrupt:
+                pass
+        exit('Work is suspended. Bye-bye')
+
+    save_proxies(args, worked_proxies)
