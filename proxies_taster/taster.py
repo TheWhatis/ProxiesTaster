@@ -24,12 +24,12 @@ from aiohttp_proxy import ProxyConnector
 
 # Exceptoins
 # Aiohttp
-from aiohttp.client_exceptions import ClientConnectorError
 from aiohttp.client_exceptions import ServerDisconnectedError
+from aiohttp.client_exceptions import ClientConnectorError
 from aiohttp.client_exceptions import ClientHttpProxyError
-from aiohttp.client_exceptions import ClientOSError
 from aiohttp.client_exceptions import ClientResponseError
 from aiohttp.client_exceptions import ClientPayloadError
+from aiohttp.client_exceptions import ClientOSError
 from aiohttp.client_exceptions import InvalidURL
 
 # Proxy
@@ -58,6 +58,8 @@ from .events_data import ProxyError
 from .events_data import RunStart
 from .events_data import RunEnd
 
+# Exceptions
+from .exceptions import TooManyOpenFilesError
 
 def events_wrap(
         event: str,
@@ -233,6 +235,16 @@ class ProxiesTaster:
         # Провряемые протоколы
         self.protocols: list[Protocol] = [protocol for protocol in Protocol]
 
+        # Устанавливаем на каждый прокси
+        # рандомные заголовки
+        self.headers = {
+            proxy: {
+                "User-Agent": UserAgent().random,
+                "Accept": "*/*",
+                "Proxy-Connection": "Keep-Alive"
+            } for proxy in proxies
+        }
+
         # Events
         self.emitter = EventEmitter()
 
@@ -357,13 +369,6 @@ class ProxiesTaster:
         # Обрабатываем переданный прокси
         proxy = next(iter(proxy.split('://')), 1) or proxy
 
-        # Заголовки
-        headers = {
-            "User-Agent": UserAgent().random,
-            "Accept": "*/*",
-            "Proxy-Connection": "Keep-Alive"
-        }
-
         # Разделяем строку прокси, для проверки валидности
         splitted_proxy = proxy.split("@")
         len_splitted_proxy = len(splitted_proxy)
@@ -433,7 +438,7 @@ class ProxiesTaster:
             try:
                 # Общие параметры для прокси
                 kwargs = {
-                    "headers": headers,
+                    "headers": self.headers[proxy],
                     "timeout": 10
                 }
 
@@ -452,12 +457,18 @@ class ProxiesTaster:
                     }
                 )
             except ProxiesTaster.errors as err:
+                message = str(err)
+                if 'Too many open files' in message:
+                    message = f"Proxy: {proxy}, " \
+                        + f"Protocol: {protocol} " \
+                        + '[Too many open files]'
+                    raise TooManyOpenFilesError(message, err);
                 error = ProxyError.create(
                     name='except.error.skipped',
                     protocol=protocol,
                     proxy=proxy,
                     level='skipped',
-                    message=str(err),
+                    message=message,
                     exception=err
                 );
                 self.emitter.emit('error', error)
