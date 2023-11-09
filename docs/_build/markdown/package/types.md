@@ -7,10 +7,10 @@
 Доступные протоколы прокси
 
 * **Параметры:**
-  * **HTTP** (*str*) – HTTP прокси
-  * **HTTPS** (*str*) – HTTPS прокси
-  * **SOCKS4** (*str*) – SOCKS4 прокси
   * **SOCKS5** (*str*) – SOCKS5 прокси
+  * **SOCKS4** (*str*) – SOCKS4 прокси
+  * **HTTPS** (*str*) – HTTPS прокси
+  * **HTTP** (*str*) – HTTP прокси
 
 #### HTTP *= 'http'*
 
