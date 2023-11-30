@@ -10,17 +10,9 @@ install:
 	@if [ -f "${LINKPATH}" ]; then \
 	    echo 'ProxiesTaster already installed'; \
 	else \
-	    if ! [ `stat -c %a "${SCRIPT}"` -eq 755 ]; then \
-		sudo chmod ugo+x "${SCRIPT}"; \
-	    else \
-		echo "${SCRIPT} script already has all execute permission"; \
-	    fi; \
 	    pip install proxies-taster colorama tqdm --break-system-packages; \
-	    if [ ! -d "${LIBDIR}" ]; then \
-		sudo mkdir -p "${LIBDIR}"; \
-	    fi; \
-	    sudo cp proxies_parser_logger.py "${LIBDIR}/proxies_parser_logger.py"; \
-	    sudo cp proxies-taster "${DESTDIR}/${SCRIPT}"; \
+	    sudo install -D -t ${LIBDIR} proxies_parser_logger.py; \
+	    sudo install -D -t ${DESTDIR} proxies-taster; \
 	    sudo ln -s "${DESTDIR}/${SCRIPT}" "${LINKPATH}"; \
 	fi;
 install-dev:
