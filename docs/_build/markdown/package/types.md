@@ -1,6 +1,6 @@
 # Types
 
-### *class* proxies_taster.types.Protocol(value, names=None, \*, module=None, qualname=None, type=None, start=1, boundary=None)
+### *class* proxies_taster.types.Protocol(value, names=<not given>, \*values, module=None, qualname=None, type=None, start=1, boundary=None)
 
 Базовые классы: `Enum`
 
@@ -25,7 +25,7 @@
 Тип данных обозначающий в каком формате
 передавать прокси для их проверки и обработки
 
-alias of `list`[`Union`[`str`, [`ProxyDict`](#proxies_taster.types.ProxyDict)]]
+alias of `list`[`str` | [`ProxyDict`](#proxies_taster.types.ProxyDict)]
 
 ### *class* proxies_taster.types.ProxyDict(protocol: [Protocol](#proxies_taster.types.Protocol), proxy: str)
 
@@ -38,9 +38,9 @@ alias of `list`[`Union`[`str`, [`ProxyDict`](#proxies_taster.types.ProxyDict)]]
   * **protocol** ([*Protocol*](#proxies_taster.types.Protocol)) – Протокол, по которому подключаться
   * **proxy** (*str*) – Сам прокси ip:port
 
-#### protocol*: [Protocol](#proxies_taster.types.Protocol)*
+#### protocol *: [Protocol](#proxies_taster.types.Protocol)*
 
-#### proxy*: str*
+#### proxy *: str*
 
 ### *class* proxies_taster.types.WorkedProxy(protocol: [Protocol](#proxies_taster.types.Protocol), proxy: str, url: str, response: ClientResponse, status: int, body: dict | str, country: str | False)
 
@@ -53,15 +53,15 @@ alias of `list`[`Union`[`str`, [`ProxyDict`](#proxies_taster.types.ProxyDict)]]
   * **url** (*str*) – Ссылка на прокси
   * **response** (*ClientResponse*) – Объект ответа от сервера
   * **status** (*int*) – Http код ответа
-  * **body** (*Union**[**dict**,* *str**]*) – Тело ответа
-  * **country** (*Union**[**str**,* *False**]*) – Страна прокси
+  * **body** (*Union* *[**dict* *,* *str* *]*) – Тело ответа
+  * **country** (*Union* *[**str* *,* *False* *]*) – Страна прокси
 
-#### body*: dict | str*
+#### body *: dict | str*
 
-#### country*: str | False*
+#### country *: str | False*
 
-#### response*: ClientResponse*
+#### response *: ClientResponse*
 
-#### status*: int*
+#### status *: int*
 
-#### url*: str*
+#### url *: str*

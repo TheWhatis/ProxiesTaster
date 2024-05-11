@@ -65,7 +65,6 @@ proxies = await taster.run()
 # Contents:
 
 * [ProxiesTaster](package/ProxiesTaster.md)
-  * [`ProxiesTaster`](package/ProxiesTaster.md#proxies_taster.ProxiesTaster)
 * [Types](package/types.md)
   * [`Protocol`](package/types.md#proxies_taster.types.Protocol)
   * [`Proxies`](package/types.md#proxies_taster.types.Proxies)

@@ -11,7 +11,7 @@
   **result** (*Any*) – Любой резульатат конца
   работы события
 
-#### result*: Any*
+#### result *: Any*
 
 ### *class* proxies_taster.events_data.Error(name: str, message: str, level: Literal['not work', 'error', 'critical', 'skipped'], exception: any)
 
@@ -22,7 +22,7 @@
 
 * **Параметры:**
   * **message** (*str*) – Сообщение ошибки
-  * **level** (*Literal**[**'default'**,* *'error'**,* *'critical'**,* *'skipped'**]*) – Уровень ошибки: если „not work“,
+  * **level** (*Literal* *[* *'default'* *,*  *'error'* *,*  *'critical'* *,*  *'skipped'* *]*) – Уровень ошибки: если „not work“,
     то это уровень «не работы прокси», если „error“,
     то скорее всего это ошибка передачи параметров, либо
     не сильно критические непредвиденные ошибки, а „critical“
@@ -33,11 +33,11 @@
 
 #### *classmethod* create(exception=False, \*\*kwargs)
 
-#### exception*: any*
+#### exception *: any*
 
-#### level*: Literal['not work', 'error', 'critical', 'skipped']*
+#### level *: Literal['not work', 'error', 'critical', 'skipped']*
 
-#### message*: str*
+#### message *: str*
 
 ### *class* proxies_taster.events_data.Event(name: str)
 
@@ -49,9 +49,9 @@
   * **name** (*str*) – Название события
   * **additional** (*Any*) – Доп аргументы для него
 
-#### name*: str*
+#### name *: str*
 
-### *class* proxies_taster.events_data.Events(value, names=None, \*, module=None, qualname=None, type=None, start=1, boundary=None)
+### *class* proxies_taster.events_data.Events(value, names=<not given>, \*values, module=None, qualname=None, type=None, start=1, boundary=None)
 
 Базовые классы: `Enum`
 
@@ -79,25 +79,25 @@
   * **check_error** (*str*) – Какая-либо ошибка при
     работе метода taster.check
 
-#### check*: str* *= 'check.start'*
+#### check *: str* *= 'check.start'*
 
-#### check_end*: str* *= 'check.end'*
+#### check_end *: str* *= 'check.end'*
 
-#### check_error*: str* *= 'check.error'*
+#### check_error *: str* *= 'check.error'*
 
-#### check_success*: str* *= 'check.success'*
+#### check_success *: str* *= 'check.success'*
 
-#### error*: str* *= 'error'*
+#### error *: str* *= 'error'*
 
-#### except_*: str* *= 'except.start'*
+#### except_ *: str* *= 'except.start'*
 
-#### except_end*: str* *= 'except.end'*
+#### except_end *: str* *= 'except.end'*
 
-#### except_error*: str* *= 'except.error'*
+#### except_error *: str* *= 'except.error'*
 
 #### except_error_skipped *= 'except.error.skipped'*
 
-#### except_success*: str* *= 'except.success'*
+#### except_success *: str* *= 'except.success'*
 
 ### *class* proxies_taster.events_data.Proxy(name: str, protocol: [Protocol](types.md#proxies_taster.types.Protocol) | False, proxy: str | [WorkedProxy](types.md#proxies_taster.types.WorkedProxy))
 
@@ -112,9 +112,9 @@
   * **proxy** (*str*) – Сама строка прокси или
     уже рабочий прокси
 
-#### protocol*: [Protocol](types.md#proxies_taster.types.Protocol) | False*
+#### protocol *: [Protocol](types.md#proxies_taster.types.Protocol) | False*
 
-#### proxy*: str | [WorkedProxy](types.md#proxies_taster.types.WorkedProxy)*
+#### proxy *: str | [WorkedProxy](types.md#proxies_taster.types.WorkedProxy)*
 
 ### *class* proxies_taster.events_data.ProxyError(name: str, message: str, level: Literal['not work', 'error', 'critical', 'skipped'], exception: any, protocol: [Protocol](types.md#proxies_taster.types.Protocol) | False, proxy: str | [WorkedProxy](types.md#proxies_taster.types.WorkedProxy))
 
@@ -139,9 +139,9 @@
 работы проверки прокси
 
 * **Параметры:**
-  **proxies** (*list**[*[*WorkedProxy*](types.md#proxies_taster.types.WorkedProxy)*]*) – Список рабочих прокси
+  **proxies** (*list* *[*[*WorkedProxy*](types.md#proxies_taster.types.WorkedProxy) *]*) – Список рабочих прокси
 
-#### proxies*: list[[WorkedProxy](types.md#proxies_taster.types.WorkedProxy)]*
+#### proxies *: list[[WorkedProxy](types.md#proxies_taster.types.WorkedProxy)]*
 
 ### *class* proxies_taster.events_data.RunStart(name: str, proxies: list[str | [ProxyDict](types.md#proxies_taster.types.ProxyDict)], workers: int)
 
@@ -155,9 +155,9 @@
   * **workers** (*int*) – Количество «воркеров» -
     асинхронных запросов
 
-#### proxies*: list[str | [ProxyDict](types.md#proxies_taster.types.ProxyDict)]*
+#### proxies *: list[str | [ProxyDict](types.md#proxies_taster.types.ProxyDict)]*
 
-#### workers*: int*
+#### workers *: int*
 
 ### *class* proxies_taster.events_data.Start(name: str, args: list, kwargs: dict)
 
@@ -173,9 +173,9 @@
   * **kwargs** (*dict*) – Распакованный список именованных
     аргументов, передаваемых в функцию, метод
 
-#### args*: list*
+#### args *: list*
 
-#### kwargs*: dict*
+#### kwargs *: dict*
 
 ### *class* proxies_taster.events_data.Success(name: str)
 
