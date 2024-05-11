@@ -1,6 +1,5 @@
 # Typing
 from typing import Union
-from typing import Literal
 
 # Enum
 from enum import Enum

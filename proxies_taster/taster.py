@@ -61,6 +61,7 @@ from .events_data import RunEnd
 # Exceptions
 from .exceptions import TooManyOpenFilesError
 
+
 def events_wrap(
         event: str,
         protocol: int,
