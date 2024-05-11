@@ -3,7 +3,7 @@ from setuptools import setup
 
 
 name = 'proxies-taster'
-version = '1.2.1'
+version = '1.2.2'
 
 # Long description
 with open('README.md', 'r') as readme:
