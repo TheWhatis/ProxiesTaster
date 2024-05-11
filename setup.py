@@ -5,6 +5,7 @@ from setuptools import setup
 name = 'proxies-taster'
 version = '1.2.2'
 
+
 # Long description
 with open('README.md', 'r') as readme:
     long_description = readme.read()
@@ -38,5 +39,11 @@ if __name__ == '__main__':
             'aiohttp-proxy',
             'fake-useragent',
             'PyEventEmitter'
-        ]
+        ],
+
+        entry_points={
+            "console_scripts": [
+                'proxies-taster = proxies_taster.__main__:main'
+            ]
+        }
     )
