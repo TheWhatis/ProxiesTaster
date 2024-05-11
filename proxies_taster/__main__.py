@@ -27,8 +27,7 @@ from proxies_taster.events_data import Events
 from proxies_taster.exceptions import TooManyOpenFilesError
 
 # My logger
-from proxies_parser_logger import setting_logging
-
+from proxies_taster.proxies_parser_logger import setting_logging
 
 args = []
 bars: dict = {}
