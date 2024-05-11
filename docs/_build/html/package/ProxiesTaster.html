@@ -35,6 +35,234 @@
             
   <section id="proxiestaster">
 <h1>ProxiesTaster<a class="headerlink" href="#proxiestaster" title="Link to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="proxies_taster.ProxiesTaster">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">proxies_taster.</span></span><span class="sig-name descname"><span class="pre">ProxiesTaster</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">proxies</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="types.html#proxies_taster.types.ProxyDict" title="proxies_taster.types.ProxyDict"><span class="pre">ProxyDict</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#proxies_taster.ProxiesTaster" title="Link to this definition">¶</a></dt>
+<dd><p>Базовые классы: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Класс который как-раз таки
+и проверяет полученные прокси</p>
+<p>Для начала необходимо просто при
+иницилизации передать необходимые
+прокси:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">proxies_taster</span> <span class="kn">import</span> <span class="n">Protocol</span>
+
+<span class="n">taster</span> <span class="o">=</span> <span class="n">ProxiesTaster</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="s1">&#39;194.163.132.76:41212&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;socks5://91.121.52.213:55348&#39;</span><span class="p">,</span>
+        <span class="n">ProxyDict</span><span class="p">(</span>
+            <span class="n">Protocol</span><span class="o">.</span><span class="n">SOCKS4</span><span class="p">,</span>
+            <span class="s1">&#39;172.104.136.161:39104&#39;</span>
+        <span class="p">)</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Далее можете изменить некоторые
+настройки (своё количество
+«воркеров» - количество асинхронных
+запросов, определяемые протоколы:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">proxies_taster</span> <span class="kn">import</span> <span class="n">Protocol</span>
+
+<span class="n">taster</span><span class="o">.</span><span class="n">set_workers</span><span class="p">(</span><span class="mi">2000</span><span class="p">)</span>
+<span class="n">taster</span><span class="o">.</span><span class="n">set_protocols</span><span class="p">(</span>
+    <span class="p">[</span><span class="n">Protocol</span><span class="o">.</span><span class="n">SOCKS4</span><span class="p">,</span> <span class="n">Protocol</span><span class="o">.</span><span class="n">SOCKS5</span><span class="p">]</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>errors</strong> (<em>tuple</em>) – Список ошибок, которые возникают
+при неправильной работе прокси (список
+пропускаемых ошибок)</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="proxies_taster.ProxiesTaster.check">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">proxy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">protocol</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="types.html#proxies_taster.types.Protocol" title="proxies_taster.types.Protocol"><span class="pre">Protocol</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="k"><span class="pre">False</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="types.html#proxies_taster.types.WorkedProxy" title="proxies_taster.types.WorkedProxy"><span class="pre">WorkedProxy</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="k"><span class="pre">False</span></span></span></span><a class="headerlink" href="#proxies_taster.ProxiesTaster.check" title="Link to this definition">¶</a></dt>
+<dd><p>Проверяет прокси на роботоспособность
+и определяет его сетевой протокол</p>
+<p>Проверка производиться перебором
+протоколов и попыткой подключения
+к ним. Автоматически проверяется
+работоспособность</p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>proxy</strong> (<em>str</em>) – Сам прокси ip:port</p></li>
+<li><p><strong>protocol</strong> (<em>Union</em><em>[</em><a class="reference internal" href="types.html#proxies_taster.types.Protocol" title="proxies_taster.types.Protocol"><em>Protocol</em></a><em>, </em><em>False</em><em>]</em>) – Протокол по которому проверять прокси</p></li>
+</ul>
+</dd>
+<dt class="field-even">Результат<span class="colon">:</span></dt>
+<dd class="field-even"><p>Если успешно - выдает протокол, прокси
+и расположение (результат ответа от ipinfo.io)</p>
+</dd>
+<dt class="field-odd">Тип результата<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Union[<a class="reference internal" href="types.html#proxies_taster.types.WorkedProxy" title="proxies_taster.types.WorkedProxy">WorkedProxy</a>, False]</p>
+</dd>
+</dl>
+<p><strong>Пример работы</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">proxies_taster</span> <span class="kn">import</span> <span class="n">Protocol</span>
+
+<span class="c1"># Обычной передачей прокси</span>
+<span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">taster</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="s1">&#39;107.174.66.231:36626&#39;</span><span class="p">)</span>
+
+<span class="c1"># Или с указанием определенного протокола</span>
+<span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">taster</span><span class="o">.</span><span class="n">check</span><span class="p">(</span>
+    <span class="s1">&#39;107.174.66.231:36626&#39;</span><span class="p">,</span> <span class="n">Protocol</span><span class="o">.</span><span class="n">HTTP</span>
+<span class="p">)</span>
+
+<span class="c1"># Или также можно указать протокол</span>
+<span class="c1"># в самой строке прокси</span>
+<span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">taster</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="s1">&#39;socks4://107.174.66.231:36626&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="proxies_taster.ProxiesTaster.errors">
+<span class="sig-name descname"><span class="pre">errors</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">(&lt;class</span> <span class="pre">'aiohttp_proxy.errors.InvalidServerReply'&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'aiohttp.client_exceptions.ClientConnectorError'&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'aiohttp_proxy.errors.InvalidServerVersion'&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'aiohttp.client_exceptions.ServerDisconnectedError'&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'TimeoutError'&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'TimeoutError'&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'ConnectionResetError'&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'aiohttp_proxy.errors.SocksConnectionError'&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'aiohttp.client_exceptions.ClientHttpProxyError'&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'aiohttp.client_exceptions.ClientOSError'&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'aiohttp.client_exceptions.ClientResponseError'&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'aiohttp.client_exceptions.ClientPayloadError'&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'aiohttp_proxy.errors.NoAcceptableAuthMethods'&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'aiohttp_proxy.errors.SocksError'&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'aiohttp.client_exceptions.InvalidURL'&gt;)</span></em><a class="headerlink" href="#proxies_taster.ProxiesTaster.errors" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="proxies_taster.ProxiesTaster.exc">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">exc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">protocol</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="types.html#proxies_taster.types.Protocol" title="proxies_taster.types.Protocol"><span class="pre">Protocol</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">proxy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="types.html#proxies_taster.types.WorkedProxy" title="proxies_taster.types.WorkedProxy"><span class="pre">WorkedProxy</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="k"><span class="pre">False</span></span></span></span><a class="headerlink" href="#proxies_taster.ProxiesTaster.exc" title="Link to this definition">¶</a></dt>
+<dd><p>Делает запрос через aiohttp
+и, с помощью exceptions, определяет
+что прокси рабочий или нет</p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>protocol</strong> (<a class="reference internal" href="types.html#proxies_taster.types.Protocol" title="proxies_taster.types.Protocol"><em>Protocol</em></a>) – Протокол, по которому обращаться к прокси</p></li>
+<li><p><strong>proxy</strong> (<em>str</em>) – Сам прокси</p></li>
+</ul>
+</dd>
+<dt class="field-even">Результат<span class="colon">:</span></dt>
+<dd class="field-even"><p>Возвращает либо
+проверенный прокси, либо False</p>
+</dd>
+<dt class="field-odd">Тип результата<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Union[<a class="reference internal" href="types.html#proxies_taster.types.WorkedProxy" title="proxies_taster.types.WorkedProxy">WorkedProxy</a>, False]</p>
+</dd>
+</dl>
+<p><strong>Пример проверки прокси</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">proxies_taster</span> <span class="kn">import</span> <span class="n">Protocol</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">taster</span><span class="o">.</span><span class="n">exc</span><span class="p">(</span>
+    <span class="n">Protocol</span><span class="o">.</span><span class="n">SOCKS4</span><span class="p">,</span> <span class="s1">&#39;107.174.66.231:36626&#39;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="proxies_taster.ProxiesTaster.on">
+<span class="sig-name descname"><span class="pre">on</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="events_data.html#proxies_taster.events_data.Events" title="proxies_taster.events_data.Events"><span class="pre">Events</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">listener</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="events_data.html#proxies_taster.events_data.Event" title="proxies_taster.events_data.Event"><span class="pre">Event</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#proxies_taster.ProxiesTaster.on" title="Link to this definition">¶</a></dt>
+<dd><p>Установить обработчик события</p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>event</strong> (<a class="reference internal" href="events_data.html#proxies_taster.events_data.Events" title="proxies_taster.events_data.Events"><em>Events</em></a>) – Название события</p></li>
+<li><p><strong>listener</strong> (<em>Callable</em><em>[</em><em>[</em><a class="reference internal" href="events_data.html#proxies_taster.events_data.Event" title="proxies_taster.events_data.Event"><em>Event</em></a><em>]</em><em>, </em><em>None</em><em>]</em>) – Обработчик этого события</p></li>
+</ul>
+</dd>
+<dt class="field-even">Результат<span class="colon">:</span></dt>
+<dd class="field-even"><p>Ничего не возвращает</p>
+</dd>
+<dt class="field-odd">Тип результата<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+<p><strong>Пример работы</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Подключаем enum с константами событий</span>
+<span class="kn">from</span> <span class="nn">proxies_taster.events_data</span> <span class="kn">import</span> <span class="n">Events</span>
+
+<span class="k">def</span> <span class="nf">print_data</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+
+<span class="c1"># Можно установить лямбду</span>
+<span class="n">taster</span><span class="o">.</span><span class="n">on</span><span class="p">(</span>
+    <span class="n">Events</span><span class="o">.</span><span class="n">error</span><span class="p">,</span>
+    <span class="k">lambda</span> <span class="n">event</span><span class="p">:</span> <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">message</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="c1"># Или функцию</span>
+<span class="n">taster</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">Events</span><span class="o">.</span><span class="n">check</span><span class="p">,</span> <span class="n">print_data</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="proxies_taster.ProxiesTaster.run">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="types.html#proxies_taster.types.WorkedProxy" title="proxies_taster.types.WorkedProxy"><span class="pre">WorkedProxy</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#proxies_taster.ProxiesTaster.run" title="Link to this definition">¶</a></dt>
+<dd><p>Запускает весь процесс проверки
+и возвращает уже рабочие прокси</p>
+<dl class="field-list simple">
+<dt class="field-odd">Результат<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Рабочие прокси</p>
+</dd>
+<dt class="field-even">Тип результата<span class="colon">:</span></dt>
+<dd class="field-even"><p>list[<a class="reference internal" href="types.html#proxies_taster.types.WorkedProxy" title="proxies_taster.types.WorkedProxy">WorkedProxy</a>]</p>
+</dd>
+</dl>
+<p><strong>Пример работы</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">taster</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="proxies_taster.ProxiesTaster.set_protocols">
+<span class="sig-name descname"><span class="pre">set_protocols</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">protocols</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="types.html#proxies_taster.types.Protocol" title="proxies_taster.types.Protocol"><span class="pre">Protocol</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="types.html#proxies_taster.types.Protocol" title="proxies_taster.types.Protocol"><span class="pre">Protocol</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#proxies_taster.ProxiesTaster.set_protocols" title="Link to this definition">¶</a></dt>
+<dd><p>Установить определяемые
+протоколы (что-то вроде фильтра)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>protocols</strong> (<em>Union</em><em>[</em><em>list</em><em>[</em><a class="reference internal" href="types.html#proxies_taster.types.Protocol" title="proxies_taster.types.Protocol"><em>Protocol</em></a><em>]</em><em>]</em>) – Список определяемых протоколов:
+Protocol.HTTP, Protocol.HTTPS,
+Protocol.SOCKS4, Protocol.SOCKS5</p>
+</dd>
+<dt class="field-even">Результат<span class="colon">:</span></dt>
+<dd class="field-even"><p>Ничего не возвращает</p>
+</dd>
+<dt class="field-odd">Тип результата<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+<p><strong>Пример работы</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">proxies_taster</span> <span class="kn">import</span> <span class="n">Protocol</span>
+
+<span class="n">taster</span><span class="o">.</span><span class="n">set_protocols</span><span class="p">(</span>
+    <span class="p">[</span><span class="n">Protocol</span><span class="o">.</span><span class="n">SOCKS4</span><span class="p">,</span> <span class="n">Protocol</span><span class="o">.</span><span class="n">SOCKS5</span><span class="p">]</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="proxies_taster.ProxiesTaster.set_workers">
+<span class="sig-name descname"><span class="pre">set_workers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">workers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#proxies_taster.ProxiesTaster.set_workers" title="Link to this definition">¶</a></dt>
+<dd><p>Установить количество асинхронных
+задач «воркеров»</p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>workers</strong> (<em>int</em>) – Количество асинхронных задач</p>
+</dd>
+<dt class="field-even">Результат<span class="colon">:</span></dt>
+<dd class="field-even"><p>Ничего не возвращает</p>
+</dd>
+<dt class="field-odd">Тип результата<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+<p><strong>Пример работы</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">taster</span><span class="o">.</span><span class="n">set_workers</span><span class="p">(</span><span class="mi">300</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 
 
