@@ -20,11 +20,11 @@ from colorama import init
 from tqdm import tqdm
 
 # ProxiesTaster
-from proxies_taster import Protocol
-from proxies_taster import WorkedProxy
-from proxies_taster import ProxiesTaster
-from proxies_taster.events_data import Events
-from proxies_taster.exceptions import TooManyOpenFilesError
+from .types import Protocol
+from .types import WorkedProxy
+from .types import ProxiesTaster
+from .events_data import Events
+from .exceptions import TooManyOpenFilesError
 
 # My logger
 from proxies_parser_logger import setting_logging
