@@ -32,7 +32,7 @@ if __name__ == '__main__':
         url=url,
         download_url=f"{url}/dist/{name}-{version}.zip",
 
-        packages=['ptaster'],
+        packages=['proxtaster'],
         include_package_data=True,
         install_requires=[
             'aiohttp',

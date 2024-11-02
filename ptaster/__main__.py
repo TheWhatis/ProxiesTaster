@@ -20,14 +20,14 @@ from colorama import init
 from tqdm import tqdm
 
 # ProxiesTaster
-from ptaster import Protocol
-from ptaster import WorkedProxy
-from ptaster import ProxiesTaster
-from ptaster.events_data import Events
-from ptaster.exceptions import TooManyOpenFilesError
+from proxtaster import Protocol
+from proxtaster import WorkedProxy
+from proxtaster import ProxiesTaster
+from proxtaster.events_data import Events
+from proxtaster.exceptions import TooManyOpenFilesError
 
 # My logger
-from ptaster.proxies_parser_logger import setting_logging
+from proxtaster.proxies_parser_logger import setting_logging
 
 args = []
 bars: dict = {}

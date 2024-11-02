@@ -167,7 +167,7 @@ class ProxiesTaster:
 
     .. code-block:: python
 
-        from ptaster import Protocol
+        from proxtaster import Protocol
 
         taster = ProxiesTaster(
             [
@@ -187,7 +187,7 @@ class ProxiesTaster:
 
     .. code-block:: python
 
-        from ptaster import Protocol
+        from proxtaster import Protocol
 
         taster.set_workers(2000)
         taster.set_protocols(
@@ -278,7 +278,7 @@ class ProxiesTaster:
 
         .. code-block:: python
 
-            from ptaster import Protocol
+            from proxtaster import Protocol
 
             taster.set_protocols(
                 [Protocol.SOCKS4, Protocol.SOCKS5]
@@ -310,7 +310,7 @@ class ProxiesTaster:
         .. code-block:: python
 
             # Подключаем enum с константами событий
-            from ptaster.events_data import Events
+            from proxtaster.events_data import Events
 
             def print_data(data):
                 print(data.name, data)
@@ -351,7 +351,7 @@ class ProxiesTaster:
 
         .. code-block:: python
 
-            from ptaster import Protocol
+            from proxtaster import Protocol
 
             result = await taster.exc(
                 Protocol.SOCKS4, '107.174.66.231:36626'
@@ -549,7 +549,7 @@ class ProxiesTaster:
 
         .. code-block:: python
 
-            from ptaster import Protocol
+            from proxtaster import Protocol
 
             # Обычной передачей прокси
             result = await taster.check('107.174.66.231:36626')
