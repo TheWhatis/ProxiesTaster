@@ -2,7 +2,7 @@
 from setuptools import setup
 
 
-name = 'ptaster'
+name = 'proxtaster'
 version = '1.0.1'
 
 
@@ -10,7 +10,7 @@ version = '1.0.1'
 with open('README.md', 'r') as readme:
     long_description = readme.read()
 
-url = 'https://github.com/TheWhatis/ProxiesTaster'
+url = 'https://gitlab.com/thewhatis/ptaster'
 
 
 if __name__ == '__main__':
