@@ -236,16 +236,6 @@ class ProxiesTaster:
         # Провряемые протоколы
         self.protocols: list[Protocol] = [protocol for protocol in Protocol]
 
-        # Устанавливаем на каждый прокси
-        # рандомные заголовки
-        self.headers = {
-            proxy: {
-                "User-Agent": UserAgent().random,
-                "Accept": "*/*",
-                "Proxy-Connection": "Keep-Alive"
-            } for proxy in proxies
-        }
-
         # Events
         self.emitter = EventEmitter()
 
@@ -437,9 +427,14 @@ class ProxiesTaster:
                 }
         ) as session:
             try:
-                # Общие параметры для прокси
+                # Устанавливаем параметры для прокси
                 kwargs = {
-                    "headers": self.headers[proxy],
+                    # Рандомные заголовки
+                    "headers": {
+                        "User-Agent": UserAgent().random,
+                        "Accept": "*/*",
+                        "Proxy-Connection": "Keep-Alive"
+                    },
                     "timeout": 10
                 }
 
@@ -574,11 +569,12 @@ class ProxiesTaster:
                 return await self.exc(protocol, proxy)
 
             # Если протокол был передан в строке
-            if (protocol := proxy.split('://'))[0] in [
+            splitted = proxy.split('://')
+            if (protocol := splitted[0]) in [
                 protocol.value for
                 protocol in self.protocols
             ]:
-                return await self.exc(Protocol(protocol), proxy)
+                return await self.exc(Protocol(protocol), splitted[1])
 
             # Перебираем доступные прокси
             for protocol in self.protocols:
