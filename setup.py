@@ -10,7 +10,7 @@ version = '1.0.4'
 with open('README.md', 'r') as readme:
     long_description = readme.read()
 
-url = 'https://gitlab.com/thewhatis/ptaster'
+url = 'https://gitlab.com/unameska/ptaster'
 
 
 if __name__ == '__main__':
