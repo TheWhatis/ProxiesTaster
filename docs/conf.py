@@ -9,17 +9,17 @@
 import os
 import sys
 
-project = 'ProxiesTaster'
-copyright = '2023, Whatis'
-author = 'Whatis'
-release = '1.0.0'
+project = 'proxtaster'
+copyright = '2023, Unameska'
+author = 'Unameska'
+release = '1.0.6'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = [
-	'sphinx.ext.autodoc',
-	'sphinx_markdown_builder'
+    'sphinx.ext.autodoc',
+    'sphinx_markdown_builder'
 ]
 
 templates_path = ['_templates']
