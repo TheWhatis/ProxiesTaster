@@ -3,7 +3,7 @@ from setuptools import setup
 
 
 name = 'proxtaster'
-version = '1.0.4'
+version = '1.0.5'
 
 
 # Long description
@@ -18,7 +18,7 @@ if __name__ == '__main__':
         name=name,
         version=version,
 
-        author='Whatis',
+        author='Unameska',
         author_email='asdwdagwahwabe@gmail.com',
 
         description='Пакет для проверки прокси',
